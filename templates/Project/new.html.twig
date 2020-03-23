@@ -1,0 +1,23 @@
+{# templates/Project/new.html.twig #} 
+{% extends 'base.html.twig' %}
+
+{% block title %}Creat new project{% endblock %}
+
+{% block body %}
+  <div align="center">
+    <h1>Create new project</h1>
+
+    {#{ form ( form ) }#}
+     {{ form_start ( form ) }}
+      <div>
+         {{ form_errors ( form ) }}
+      </div >
+      <div>
+              {{ form_label ( form.name_proj , ' Name' ) }} 
+              {{ form_widget ( form.name_proj , { 'attr' : { 'class' : 'task_field' }} ) }}
+       </ div >
+     {{ form_end ( form ) }}
+
+    {#<button type="submit" class="button">Отправить</button>#}
+  </div>
+{% endblock %}

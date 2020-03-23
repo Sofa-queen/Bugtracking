@@ -1,0 +1,38 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+app_lucky_number:
+    path: /project
+    controller: App\Controller\ProjectController::number
+
+app_proj:
+    path: /projects
+    controller: App\Controller\ProjectsController::createProject ()
+
+app_task:
+    path: /task
+    controller: App\Controller\TaskController::new ()
+
+app_creatProj:
+    path: /createProj
+    controller: App\Controller\ProjectController::new ()
+
+app_register:
+    path: /register
+    controller: App\Controller\RegistrationController::registerAction ()
+
+app_list:
+    path: /list
+    controller: App\Controller\ProjectController::listProj ()
+
+app_editproj:
+    path: /editProj
+    controller: App\Controller\ProjectController::edit ()
+#routing_distributed:
+    # loads routes from the given routing file stored in some bundle
+#    resource: '..\src\Resources\config\routing.yml' 
+#   type: yaml
+
+
+
+
