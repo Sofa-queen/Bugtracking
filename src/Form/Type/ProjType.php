@@ -14,9 +14,9 @@ class ProjType extends AbstractType
     public function buildForm ( FormBuilderInterface $builder , array $options )
     {
         $builder
-            -> add ( 'name_proj' , TextType :: class )
+            -> add ( 'name_proj' , TextType :: class)
            // -> add ( 'dueDate' , DateType :: class )
-            -> add ( 'save' , SubmitType :: class )
+           // -> add ( 'save' , SubmitType :: class )
         ;
     }
 }

@@ -1,12 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Creat new project{% endblock %}
+{% block title %}Edit project{% endblock %}
 
 {% block body %}
   <div align="center">
     <h1>Edit project</h1>
-
-    {#{ form ( form ) }#}
+   <p>{{ name }}</p>
      {{ form_start ( form ) }}
       <div>
          {{ form_errors ( form ) }}
@@ -17,7 +16,7 @@
        </ div >
      {{ form_end ( form ) }}
 
-    {#<button type="submit" class="button">Отправить</button>#}
+    <button type="submit" class="btn btn-success">Отправить</button>
   </div>
 {% endblock %}
 

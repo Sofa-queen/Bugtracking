@@ -69,7 +69,7 @@ class ProjectController extends AbstractController
     }
 
      /**
-     * @Route("/createProj")
+     * @Route("/createProj", name="creat_proj")
      */
     public function new ( Request $request )
     {
@@ -93,14 +93,13 @@ class ProjectController extends AbstractController
     }  
 
     /**
-      * @Route("/editProj/{id}")
+      * @Route("/editProj/{id}", name="edit_proj")
       */
      public function edit ( Request $request, $id ) : Response
      {
          $proj = $this -> getDoctrine ($id)
             -> getRepository ( Projects :: class )
             -> find ( $id );
-        // $project = $this -> getCreator ();
 
          if ( ! $proj ) {
             throw $this -> createNotFoundException (
@@ -121,9 +120,24 @@ class ProjectController extends AbstractController
 
 
          return $this -> render ( 'Project/edit.html.twig' , [
-                'form' => $form -> createView (),
+                'form' => $form -> createView (), 'name' => $proj -> getNameProj () ,
            ]);
      }
 
- 
+     
+     /**
+      * @Route("/delete_proj/{id}", name="delete_proj")
+      */
+     public function delete_proj ( Request $request, $id ) : Response
+     {
+         $proj = $this -> getDoctrine ($id)
+            -> getRepository ( Projects :: class )
+            -> find ( $id );
+         $em = $this->getDoctrine()->getManager();  
+	 $em -> remove($proj);
+         $em -> flush();
+         
+         return $this->redirectToRoute('list_proj');
+      }
+
 }

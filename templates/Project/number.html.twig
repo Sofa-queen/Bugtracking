@@ -1,9 +1,13 @@
  {# templates/project/number.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}My cool blog posts{% endblock %}
+{% block title %}List of projects{% endblock %}
 
 {% block body %}
+
+<div><button type="button" style="margin: 0px 0px 0px 20px" class="btn btn-success" onclick="location.href='{{ path('creat_proj') }}'">Create Project</button></div>
+
+ <div class="card-body">
        <H1 align="center"> List of projects </H1>
        <table class="table table-hover table-dark">
   <thead>
@@ -16,13 +20,17 @@
   <tbody>
    {% for project in project %}
     <tr>
-     {# <th scope="row">1</th>#}
       <td>{{ project.id }}</td>
       <td>{{ project.nameProj }}</td>
       <td>{{ project.creator }}</td>
+      <td>
+      <td> <button type="button" class="btn btn-outline-light" onclick="location.href='{{ path('edit_proj', {'id':project.id}) }}'">Edit</button> </td>
+      <td> <button type="button" class="btn btn-outline-light" onclick="location.href='{{ path('delete_proj', {'id':project.id}) }}'">Delete</button> </td>
+
     </tr>
     <tr>
    {% endfor %}
   </tbody>
-</table>
+ </table>
+</div>
 {% endblock %}

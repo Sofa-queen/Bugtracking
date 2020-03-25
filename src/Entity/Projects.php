@@ -51,6 +51,7 @@ class Projects
     public function setNameProj(string $name_proj): self
     {
         $this->name_proj = $name_proj;
+
         return $this;
     }
 }
