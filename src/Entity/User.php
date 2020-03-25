@@ -46,8 +46,11 @@ class User implements UserInterface
      * @Assert\Length(max=4096)
      */
     private $plainPassword;
-    
-    private $role;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
 
     public function getId(): ?int
     {
@@ -61,7 +64,7 @@ class User implements UserInterface
 
     public function setUsername($username)
     {
-        $this->login = $username;
+        $this->username = $username;
 
         return $this;
     }
@@ -102,22 +105,23 @@ class User implements UserInterface
         //return $this;
     }
     
-    public function setRole($role)
+    public function getRoles() : array
     {
-        $this->role = $role;
-       
-        return $this;
+       $roles = $this -> roles;
+       $roles [] = 'ROLE_USER' ;
+
+       return array_unique ( $roles );
     }
 
-    public function getRole()
+    public function setRoles()
     {
-        return $this->role;
+        return $this->roles;
     }
 
-    public function getRoles()
-    {
-        return array('ROLE_USER','ROLE ADMIN');
-    }
+//    public function getRoles()
+//    {
+//        return array('ROLE_USER','ROLE ADMIN');
+//    }
 
     public function getSalt()
     {
