@@ -1,11 +1,53 @@
 {# templates/registration/register.html.twig #}
+{% extends 'base.html.twig' %}
+{% block title %}registration{% endblock %}
 
-{{ form_start(form) }}
-    {{ form_row(form.username) }}
-    {{ form_row(form.email) }}
-    {{ form_row(form.plainPassword.first) }}
-    {{ form_row(form.plainPassword.second) }}
 
-    <button type="submit">Register!</button>
-{{ form_end(form) }}
+{% block body %}
+             {% block header %} {% endblock %}
+
+<div style="margin: 30px 0px 0px 30px"><button onclick="location.href='{{ path('app_login') }}'" type="button" class="btn btn-warning">Entrance</button></div>
+
+ <div>
+  <div style="margin: 40px 0px 20px 0px; color: #D3D3D3; background:#4f5154; padding: 15px 30px"  >
+    <h1 align="center">Registration</h1>
+     {{ form_start(form) }}
+        <div>
+              {{ form_errors ( form ) }}
+        </div >
+        
+        <div style="margin: 5px 0px 2px 513px">
+              {{ form_label ( form.username , ' Name' ) }}
+              <br>
+              {{ form_widget ( form.username , { 'attr' : { 'class' : 'task_field' }} ) }}
+        </ div >
+
+        <div style="margin: 5px 0px 2px 0px">
+              {{ form_label ( form.email , ' Email' ) }} 
+              <br>
+              {{ form_widget ( form.email , { 'attr' : { 'class' : 'task_field' }} ) }}
+        </ div >
+
+        <div style="margin: 5px 0px 2px 0px">
+              {{ form_label ( form.plainPassword.first , ' Password' ) }}
+              <br>
+              {{ form_widget ( form.plainPassword.first , { 'attr' : { 'class' : 'task_field' }} ) }}
+        </ div >
+
+        <div style="margin: 5px 0px 5px 0px">
+              {{ form_label ( form.plainPassword.second ,  'Repeat password' ) }}
+              <br>
+              {{ form_widget ( form.plainPassword.second , { 'attr' : { 'class' : 'task_field' }} ) }}
+        </ div >
+      {{ form_end ( form ) }}
+        <div style="margin: 15px 0px 2px 65px"> <button type="submit" class="btn btn-success">Register</button></div>
+  </div>
+ </div>
+{% endblock %}
+
+    {#{ form_row(form.username) }#}
+    {#{ form_row(form.email) }#}
+    {#{ form_row(form.plainPassword.first) }#}
+    {#{ form_row(form.plainPassword.second) }#}
+{#{ form_end(form) }#}
 

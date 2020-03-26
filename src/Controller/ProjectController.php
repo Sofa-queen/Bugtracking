@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User ;
 use App\Entity\Projects ;
 use App\Form\Type\ProjType ;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,6 +30,26 @@ class ProjectController extends AbstractController
 
 	return new Response ( 'Saved new product with id ' . $proj -> getId ());
     }
+
+ /**
+     * @Route("/user")
+     */
+    public function user () : Response
+    {
+        $entityManager = $this -> getDoctrine () -> getManager ();
+
+        $user = new User ();
+        $user -> setUsername ( 'Lord' );
+        $user -> setEmail ('sofa.zu@mail.ru');
+        $user -> setPassword ( 99999 );
+        $user -> setRoles('ROLE ADMIN');
+        $entityManager -> persist ( $user );
+
+        $entityManager -> flush ();
+
+        return new Response ( 'Saved new product with id ' . $user -> getId ());
+    }
+
 
      /**
       * @Route("/project/{id}")
@@ -74,7 +95,7 @@ class ProjectController extends AbstractController
     public function new ( Request $request )
     {
 	$proj = new Projects ();
-	$proj -> getNameProj ();
+//	$proj -> getNameProj ();
 	$proj -> setCreator ( 99 );
 	$form = $this -> createForm ( ProjType :: class , $proj );
 

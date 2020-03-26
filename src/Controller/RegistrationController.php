@@ -22,8 +22,8 @@ class RegistrationController extends AbstractController
 
         // 2) обработка отправки
         $form->handleRequest($request);
-	echo "<pre>";
-	var_dump($request); die;
+//	echo "<pre>";
+//	var_dump($request); die;
         if ($form->isSubmitted() && $form->isValid()) {
           
             // 3) шифрование пароль
