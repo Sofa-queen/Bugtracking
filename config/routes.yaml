@@ -1,17 +1,13 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
-app_lucky_number:
-    path: /project
-    controller: App\Controller\ProjectController::number
-
 app_proj:
-    path: /projects
+    path: /project
     controller: App\Controller\ProjectsController::createProject ()
 
-app_task:
-    path: /task
-    controller: App\Controller\TaskController::new ()
+app_tick:
+    path: /tick
+    controller: App\Controller\ProjectsController::createTick ()
 
 app_creatProj:
     path: /createProj
@@ -28,6 +24,22 @@ app_list:
 app_editproj:
     path: /editProj
     controller: App\Controller\ProjectController::edit ()
+
+app_projid:
+    path: /project/{project}
+    controller: App\Controller\ProjectController::show ()
+
+app_projshow:
+    path: /project/{id}
+    controller: App\Controller\ProjectController::showt ()
+
+app_edittick:
+    path: /editTick/{id}
+    controller: App\Controller\TicketController::edit ()
+
+app_newtick:
+    path: /newTick
+    controller: App\Controller\TicketController::newt ()
 #routing_distributed:
     # loads routes from the given routing file stored in some bundle
 #    resource: '..\src\Resources\config\routing.yml' 

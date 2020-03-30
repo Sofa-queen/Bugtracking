@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Ticket;
 use App\Entity\User ;
 use App\Entity\Projects ;
 use App\Form\Type\ProjType ;
@@ -13,7 +14,7 @@ use Doctrine\ORM\EntityManagerInterface ;
 use Symfony\Component\HttpFoundation\Request ;
 
 class ProjectController extends AbstractController
-{
+{	
     /**
      * @Route("/project")
      */
@@ -22,8 +23,8 @@ class ProjectController extends AbstractController
         $entityManager = $this -> getDoctrine () -> getManager ();
 
         $proj = new Projects ();
-        $proj -> setNameProj ( 'CoBaKa' );
-        $proj -> setCreator ( 99 );
+        $proj -> setNameProj ( 'Хляяяя' );
+	$proj -> setCreator ( 99 );
         $entityManager -> persist ( $proj );
 
         $entityManager -> flush ();
@@ -31,48 +32,46 @@ class ProjectController extends AbstractController
 	return new Response ( 'Saved new product with id ' . $proj -> getId ());
     }
 
- /**
-     * @Route("/user")
+     /**
+     * @Route("/tick")
      */
-    public function user () : Response
+    public function createTick () : Response
     {
         $entityManager = $this -> getDoctrine () -> getManager ();
 
-        $user = new User ();
-        $user -> setUsername ( 'Lord' );
-        $user -> setEmail ('sofa.zu@mail.ru');
-        $user -> setPassword ( 99999 );
-        $user -> setRoles('ROLE ADMIN');
-        $entityManager -> persist ( $user );
+        $tick = new Ticket ();
+        $tick -> setName ( 'Хляяяя' );
+	$tick -> setCreator ( 99 );
+	$tick -> setType ('ds');
+        $tick -> setProject (18);
+        $tick -> setStatus ('gh');	
+        $entityManager -> persist ( $tick );
 
         $entityManager -> flush ();
 
-        return new Response ( 'Saved new product with id ' . $user -> getId ());
+        return new Response ( 'Saved new product with id ' . $tick -> getId ());
     }
 
+    /**
+     * @Route("/project/{id}", name="show_project")
+     */
+    public function showt ($id)
+    {
+        $entityManager = $this -> getDoctrine($id)
+	        -> getManager();
+	$project = $entityManager->getRepository(Projects::class)
+	       	-> find($id);
 
-     /**
-      * @Route("/project/{id}")
-      */
-     public function show ( $id ) : Response
-     {
-         $project = $this -> getDoctrine ($id)
-            -> getRepository ( Projects :: class )
-            -> find ( $id );
+        if (!$project) {
+            throw $this->createNotFoundException(
+                'No project found for id '.$id
+            );
+        }
 
-         if ( ! $project ) {
-            throw $this -> createNotFoundException (
-               'No product found for id ' . $id
-             );
-	 }
-
-    //      return $this->render('Project/foo.html.twig', [ 'id' => $project -> getId() ,
- //	    'name' => $project -> getNameProj () ,
-//	    'creat' => $project -> getCreator () ,
-	 //        ]);
-	 return new Response('You have visited the project : '.$project->getNameProj() ."<br>Creator:" . $project->getCreator ());
-     } 
-
+        return $this->render('Project/proj.html.twig', 
+            array('proj' => $project));
+    }
+ 
     /**
      * @Route("/list", name="list_proj")
      */
@@ -82,10 +81,8 @@ class ProjectController extends AbstractController
 	    -> getManager()
 	    -> getRepository ( Projects :: class )
 	    -> findAll();
-//		var_dump($proj[1]);
-     //  return array($proj);
         return $this->render('Project/number.html.twig', array(
-            'project' => $proj,
+            'project' => $proj
     ));
     }
 
@@ -95,15 +92,15 @@ class ProjectController extends AbstractController
     public function new ( Request $request )
     {
 	$proj = new Projects ();
-//	$proj -> getNameProj ();
-	$proj -> setCreator ( 99 );
+//	$proj -> setCreator ( 99 );
 	$form = $this -> createForm ( ProjType :: class , $proj );
-
+      
          $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
            $em = $this->getDoctrine()->getManager();
             $em->persist($proj);
-            $em->flush();
+	   $em->flush();
+	   
             return $this->redirectToRoute('list_proj');
         }
 

@@ -29,14 +29,13 @@ class RegistrationController extends AbstractController
             // 3) шифрование пароль
             $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
-	    var_dump($user);
-	    die;
+
             // 4) сохранение пользователя
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
-
-            return $this->redirectToRoute('replace_with_some_route');
+            
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render(

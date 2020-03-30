@@ -1,7 +1,15 @@
 # config/packages/security.yaml
 security:
+    encoders:
+        App\Entity\User:
+            algorithm: auto
+
     providers:
-        in_memory: { memory: ~ }
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: username
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -20,6 +28,8 @@ security:
     access_control :
         - {  path : ^/login$ ,  roles : IS_AUTHENTICATED_ANONYMOUSLY }
         - {  path : '^/list' ,  roles :  ROLE_USER}
+        - {  path : '^/createProj' ,  roles :  ROLE_USER}
+        - {  path : '^/editProj' ,  roles :  ROLE_USER}
 
     role_hierarchy :
         ROLE_ADMIN :       ROLE_USER

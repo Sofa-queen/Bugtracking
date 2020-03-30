@@ -30,7 +30,7 @@ class User implements UserInterface
     private $username;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", length=255)
      */
     private $password;
 
@@ -113,10 +113,10 @@ class User implements UserInterface
        return array_unique ( $roles );
     }
 
-    public function setRoles()
-    {
-        return $this->roles;
-    }
+//    public function setRoles()
+//    {
+//        return $this->roles;
+//    }
 
 //    public function getRoles()
 //    {

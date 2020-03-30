@@ -6,17 +6,21 @@
 {% block body %}
              {% block header %} {% endblock %}
 
-<div style="margin: 30px 0px 0px 30px"><button onclick="location.href='{{ path('app_login') }}'" type="button" class="btn btn-warning">Entrance</button></div>
+<div style="margin: 30px 0px 0px 30px"><button onclick="location.href='{{ path('app_login') }}'" type="button" class="btn btn-warning">Log in</button></div>
 
  <div>
   <div style="margin: 40px 0px 20px 0px; color: #D3D3D3; background:#4f5154; padding: 15px 30px"  >
     <h1 align="center">Registration</h1>
      {{ form_start(form) }}
-        <div>
+{#        <div>
               {{ form_errors ( form ) }}
-        </div >
+        </div >#}
         
         <div style="margin: 5px 0px 2px 513px">
+            <div>
+              {{ form_errors ( form ) }}
+        </div >
+
               {{ form_label ( form.username , ' Name' ) }}
               <br>
               {{ form_widget ( form.username , { 'attr' : { 'class' : 'task_field' }} ) }}
