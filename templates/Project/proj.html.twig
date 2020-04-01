@@ -1,0 +1,38 @@
+ {# templates/project/number.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ proj.nameProj }}{% endblock %}
+
+{% block body %}
+
+
+<div><button type="button" style="margin: 0px 0px 0px 20px" class="btn btn-success" {#onclick="location.href='{{ path({'proj_id': proj.id}, 'creat_ticket') }}'"#}>Create Ticket</button></div>
+
+ <div class="card-body">
+       <H1 align="center">List of tickets</H1>
+       <table class="table table-hover table-dark">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Name</th>
+      <th scope="col">Creator</th>
+      <th scope="col">Addressee</th>
+    </tr>
+  </thead>
+  <tbody>
+   {% for ticket in proj.ticket %}
+    <tr>
+      <td>{{ ticket.id }}</td>
+      <td><a style="color: white;" {#href="{{ path( {'proj_id':proj.id}, 'ticket', {'id':ticket.id}) }}"#}>{{ ticket.name }}</a></td>
+      <td>{{ ticket.creator }}</td>
+      <td>{{ ticket.addressee }}</td>
+      <td> <button type="button" class="btn btn-outline-light" {#onclick="location.href='{{ path( {'proj_id':proj.id}, 'edit_ticket', {'id':ticket.id}) }}'"#}>Edit</button> </td>
+      <td> <button type="button" class="btn btn-outline-light" onclick="location.href='{{ path('delete_ticket', {'id':ticket.id}) }}'">Delete</button> </td>
+    </tr>
+     {% endfor %}
+  </tbody>
+ </table>
+</div>
+<div><button type="button" style="margin: 10px 0px 0px 1150px" onclick="location.href='{{ path('list_proj') }}'" class="btn btn-secondary">List of projects</button><div>
+{% endblock %}
+

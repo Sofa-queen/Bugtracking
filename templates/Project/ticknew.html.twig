@@ -1,0 +1,33 @@
+{# templates/Project/new.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Creat new Ticket{% endblock %}
+
+{% block body %}
+  <div align="center">
+    <h1>Create new Ticket</h1>
+
+    {#{ form ( form ) }#}
+     {{ form_start ( form ) }}
+      <div>
+         {{ form_errors ( form ) }}
+      </div >
+      <div>
+              {{ form_label ( form.name , ' Name' ) }}
+              {{ form_widget ( form.name , { 'attr' : { 'class' : 'task_field' }} ) }}
+       </ div >
+       <div>
+              {{ form_label ( form.type , ' Type' ) }}
+              {{ form_widget ( form.type , { 'attr' : { 'class' : 'task_field' }} ) }}
+       </ div >
+       <div>
+              {{ form_label ( form.status , ' Status' ) }}
+              {{ form_widget ( form.status , { 'attr' : { 'class' : 'task_field' }} ) }}
+       </ div >
+
+     {{ form_end ( form ) }}
+
+    <button type="submit" class="btn btn-success">Отправить</button>
+  </div>
+{% endblock %}
+
