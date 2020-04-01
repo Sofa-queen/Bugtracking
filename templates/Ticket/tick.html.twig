@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ tick.name }}{% endblock %}
+{% block body %}
+
+ <div class="card-body">
+       <H1 align="center">Ticket</H1>
+       <H1 align="center">{{ tick.name }}</H1>
+       <table class="table table-hover table-dark">
+  <thead>
+    <tr>
+      <th scope="col">Type</th>
+      <th scope="col">Status</th>
+      <th scope="col">Description</th>
+      <th scope="col">file</th>
+      <th scope="col">Tags</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{ tick.type }}</td>
+      <td>{{ tick.status }}</td>
+      <td>{{ tick.description }}</td>
+      <td>{{ tick.file }}</td>
+      <td> --- </td>
+    </tr>
+     {#% endfor %#}
+  </tbody>
+ </table>
+</div>
+<div><button type="button" style="margin: 0px 0px 0px 600px" class="btn btn-success" onclick="location.href='{{ path( {'proj_id':proj.id}, 'comment', {'id':tick.id}) }}'">Comments</button></div>
+<div><button type="button" style="margin: 10px 0px 0px 1150px"  onclick="location.href='{{ path('show_project', {'id':proj.id}) }}'" class="btn btn-secondary">List of tickets</button><div>
+{% endblock %}
+

@@ -1,0 +1,20 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Comments{% endblock %}
+
+{% block body %}
+  <div align="center">
+    <h1>Comment on the {{ tick.name }}</h1>
+    <div> 
+       {% for comment in comment %}
+         <br> {{ comment.text }}<br>
+       {% endfor %}
+    </div>
+    <br>
+    <button type="submit" onclick="location.href='{{ path('newcomment', {'id':tick.id}) }}'" class="btn btn-success">Add comment</button>
+  </div>
+<div><button type="button" style="margin: 10px 0px 0px 1150px" onclick="location.href='{{ path( {'proj_id':proj.id}, 'ticket', {'id':tick.id}) }}'" class="btn btn-secondary">Ticket</button><div>
+
+{% endblock %}
+

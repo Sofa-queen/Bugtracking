@@ -1,0 +1,26 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Add comment{% endblock %}
+
+{% block body %}
+  <div align="center">
+    <h1>Comment on the {{ tick.name }}</h1>
+    
+                                        
+     {{ form_start ( form ) }}
+      <div>
+         {{ form_errors ( form ) }}
+      </div >
+      <div>
+              {{ form_label ( form.text , ' ' ) }}
+              {{ form_widget ( form.text , { 'attr' : { 'class' : 'task_field' }} ) }}
+       </ div >
+     {{ form_end ( form ) }}
+
+    <button type="submit" class="btn btn-success">Add</button>
+  </div>
+<div><button type="button" style="margin: 10px 0px 0px 1150px"  onclick="history.back();" class="btn btn-secondary">Comments</button><div>
+
+{% endblock %}
+
