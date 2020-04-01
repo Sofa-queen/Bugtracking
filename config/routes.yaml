@@ -1,13 +1,6 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
-app_proj:
-    path: /project
-    controller: App\Controller\ProjectsController::createProject ()
-
-app_tick:
-    path: /tick
-    controller: App\Controller\ProjectsController::createTick ()
 
 app_creatProj:
     path: /createProj
@@ -40,6 +33,19 @@ app_edittick:
 app_newtick:
     path: /newTick
     controller: App\Controller\TicketController::newt ()
+
+app_tick:
+    path: /{proj_id}/Tick/{id}
+    controller: App\Controller\TicketController::ticket ()
+
+app_comm:
+    path: /Comment/{id}
+    controller: App\Controller\CommentController::comments ()
+
+app_newcomm:
+    path: /newc_comment/{id}
+    controller: App\Controller\CommentController::newcomment ()
+
 #routing_distributed:
     # loads routes from the given routing file stored in some bundle
 #    resource: '..\src\Resources\config\routing.yml' 

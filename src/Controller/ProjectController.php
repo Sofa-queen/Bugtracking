@@ -15,42 +15,6 @@ use Symfony\Component\HttpFoundation\Request ;
 
 class ProjectController extends AbstractController
 {	
-    /**
-     * @Route("/project")
-     */
-    public function createProject () : Response
-    {
-        $entityManager = $this -> getDoctrine () -> getManager ();
-
-        $proj = new Projects ();
-        $proj -> setNameProj ( 'Хляяяя' );
-	$proj -> setCreator ( 99 );
-        $entityManager -> persist ( $proj );
-
-        $entityManager -> flush ();
-
-	return new Response ( 'Saved new product with id ' . $proj -> getId ());
-    }
-
-     /**
-     * @Route("/tick")
-     */
-    public function createTick () : Response
-    {
-        $entityManager = $this -> getDoctrine () -> getManager ();
-
-        $tick = new Ticket ();
-        $tick -> setName ( 'Хляяяя' );
-	$tick -> setCreator ( 99 );
-	$tick -> setType ('ds');
-        $tick -> setProject (18);
-        $tick -> setStatus ('gh');	
-        $entityManager -> persist ( $tick );
-
-        $entityManager -> flush ();
-
-        return new Response ( 'Saved new product with id ' . $tick -> getId ());
-    }
 
     /**
      * @Route("/project/{id}", name="show_project")
@@ -68,8 +32,8 @@ class ProjectController extends AbstractController
             );
         }
 
-        return $this->render('Project/proj.html.twig', 
-            array('proj' => $project));
+	return $this->render('Project/proj.html.twig', [
+            'proj' => $project , ]);
     }
  
     /**
