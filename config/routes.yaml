@@ -18,28 +18,24 @@ app_editproj:
     path: /editProj
     controller: App\Controller\ProjectController::edit ()
 
-app_projid:
-    path: /project/{project}
-    controller: App\Controller\ProjectController::show ()
-
 app_projshow:
     path: /project/{id}
     controller: App\Controller\ProjectController::showt ()
 
 app_edittick:
-    path: /editTick/{id}
+    path: /{proj_id}/editTick/{id}
     controller: App\Controller\TicketController::edit ()
 
 app_newtick:
-    path: /newTick
-    controller: App\Controller\TicketController::newt ()
+    path: /{proj_id}/newTick
+    controller: App\Controller\TicketController::new ()
 
 app_tick:
     path: /{proj_id}/Tick/{id}
     controller: App\Controller\TicketController::ticket ()
 
 app_comm:
-    path: /Comment/{id}
+    path: /{proj_id}/Comment/{id}
     controller: App\Controller\CommentController::comments ()
 
 app_newcomm:

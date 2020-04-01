@@ -19,21 +19,21 @@ class ProjectController extends AbstractController
     /**
      * @Route("/project/{id}", name="show_project")
      */
-    public function showt ($id)
+    public function showt ( Request $request, $id) : Response
     {
         $entityManager = $this -> getDoctrine($id)
 	        -> getManager();
-	$project = $entityManager->getRepository(Projects::class)
+	$proj = $entityManager->getRepository(Projects::class)
 	       	-> find($id);
 
-        if (!$project) {
+        if (!$proj) {
             throw $this->createNotFoundException(
                 'No project found for id '.$id
             );
         }
 
 	return $this->render('Project/proj.html.twig', [
-            'proj' => $project , ]);
+            'proj' => $proj , ]);
     }
  
     /**
