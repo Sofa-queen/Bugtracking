@@ -1,6 +1,6 @@
  {# templates/project/number.html.twig #}
 {% extends 'base.html.twig' %}
- 
+
 {% block title %}List of projects{% endblock %}
 
 {% block body %}
@@ -23,7 +23,7 @@
     <tr>
       <td>{{ project.id }}</td>
       <td><a style="color: white;" href="{{ path('show_project', {'id':project.id}) }}">{{ project.nameProj }}</a></td>
-      <td>{{ project.creator }}</td>
+      <td>{{ project.author.username }}</td>
       <td> <button type="button" class="btn btn-outline-light" onclick="location.href='{{ path('edit_proj', {'id':project.id}) }}'">Edit</button> </td>
       <td> <button type="button" class="btn btn-outline-light" onclick="location.href='{{ path('delete_proj', {'id':project.id}) }}'">Delete</button> </td>
     </tr>
