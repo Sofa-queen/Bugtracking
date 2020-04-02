@@ -14,7 +14,7 @@ use Doctrine\ORM\EntityManagerInterface ;
 use Symfony\Component\HttpFoundation\Request ;
 
 class ProjectController extends AbstractController
-{	
+{
 
     /**
      * @Route("/project/{id}", name="show_project")
@@ -36,19 +36,19 @@ class ProjectController extends AbstractController
 //            'proj' => $proj , ]);
               array('proj' => $proj));
     }
- 
+
     /**
      * @Route("/list", name="list_proj")
      */
     public function listProj () : Response
     {
-        $proj = $this -> getDoctrine()
-	    -> getManager()
-	    -> getRepository ( Projects :: class )
-	    -> findAll();
+        $proj = $this->getDoctrine()
+                     ->getManager()
+                     ->getRepository ( Projects :: class )
+                     ->findAll();
         return $this->render('Project/number.html.twig', array(
             'project' => $proj
-    ));
+        ));
     }
 
      /**
@@ -56,24 +56,24 @@ class ProjectController extends AbstractController
      */
     public function new ( Request $request )
     {
-	$proj = new Projects ();
-//	$proj -> setCreator ( 99 );
-	$form = $this -> createForm ( ProjType :: class , $proj );
-      
-         $form->handleRequest($request);
+        $proj = new Projects ();
+        $form = $this -> createForm ( ProjType :: class , $proj );
+
+        $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-           $em = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
+            $proj->setAuthor($this->getUser());
             $em->persist($proj);
-	   $em->flush();
-	   
+            $em->flush();
+
             return $this->redirectToRoute('list_proj');
         }
 
 
         return $this -> render ( 'Project/new.html.twig' , [
-		'form' => $form -> createView (),
-	]);
-    }  
+            'form' => $form -> createView (),
+        ]);
+    }
 
     /**
       * @Route("/editProj/{id}", name="edit_proj")
@@ -107,7 +107,7 @@ class ProjectController extends AbstractController
            ]);
      }
 
-     
+
      /**
       * @Route("/delete_proj/{id}", name="delete_proj")
       */
@@ -116,10 +116,10 @@ class ProjectController extends AbstractController
          $proj = $this -> getDoctrine ($id)
             -> getRepository ( Projects :: class )
             -> find ( $id );
-         $em = $this->getDoctrine()->getManager();  
+         $em = $this->getDoctrine()->getManager();
 	 $em -> remove($proj);
          $em -> flush();
-         
+
          return $this->redirectToRoute('list_proj');
       }
 

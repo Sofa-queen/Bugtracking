@@ -21,17 +21,18 @@ class Projects
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $creator;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $name_proj;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="project")
      */
     private $ticket;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
 
     public function __construct()
     {
@@ -41,18 +42,6 @@ class Projects
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getCreator(): ?string
-    {
-        return $this->creator;
-    }
-
-    public function setCreator(string $creator): self
-    {
-        $this->creator = $creator;
-
-        return $this;
     }
 
     public function getNameProj(): ?string
@@ -94,6 +83,18 @@ class Projects
                 $ticket->setProject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }
