@@ -6,7 +6,7 @@
 {% block body %}
 
 
-<div><button type="button" style="margin: 0px 0px 0px 20px" class="btn btn-success" {#onclick="location.href='{{ path({'proj_id': proj.id}, 'creat_ticket') }}'"#}>Create Ticket</button></div>
+<div><button type="button" style="margin: 0px 0px 0px 20px" class="btn btn-success" onclick="location.href='{{ path( 'creat_ticket', {'proj_id': proj.id}) }}'">Create Ticket</button></div>
 
  <div class="card-body">
        <H1 align="center">List of tickets</H1>
@@ -23,10 +23,10 @@
    {% for ticket in proj.ticket %}
     <tr>
       <td>{{ ticket.id }}</td>
-      <td><a style="color: white;" {#href="{{ path( {'proj_id':proj.id}, 'ticket', {'id':ticket.id}) }}"#}>{{ ticket.name }}</a></td>
+      <td><a style="color: white;" href="{{ path( 'ticket', {'id':ticket.id}) }}" >{{ ticket.name }}</a></td>
       <td>{{ ticket.creator }}</td>
       <td>{{ ticket.addressee }}</td>
-      <td> <button type="button" class="btn btn-outline-light" {#onclick="location.href='{{ path( {'proj_id':proj.id}, 'edit_ticket', {'id':ticket.id}) }}'"#}>Edit</button> </td>
+      <td> <button type="button" class="btn btn-outline-light" onclick="location.href='{{ path( 'edit_ticket', {'id':ticket.id}) }}'">Edit</button> </td>
       <td> <button type="button" class="btn btn-outline-light" onclick="location.href='{{ path('delete_ticket', {'id':ticket.id}) }}'">Delete</button> </td>
     </tr>
      {% endfor %}

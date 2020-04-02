@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request ;
 class TicketController extends AbstractController
 {
      /**
-     * @Route("/{proj_id}/newTick", name="creat_ticket")
+     * @Route("/newTick/{proj_id}", name="creat_ticket")
      */
     public function new ( $proj_id, Request $request )
     {
@@ -52,14 +52,14 @@ class TicketController extends AbstractController
     }
 
      /**
-      * @Route("/{proj_id}/editTick/{id}", name="edit_ticket")
+      * @Route("/editTick/{id}", name="edit_ticket")
       */
-     public function edit ($proj_id, Request $request, $id ) : Response
+     public function edit ( Request $request, $id ) : Response
      {
-	  $entityManager = $this -> getDoctrine($proj_id)
-                -> getManager();
-        $project = $entityManager->getRepository(Projects::class)
-                -> find($proj_id);
+//	  $entityManager = $this -> getDoctrine($proj_id)
+//                -> getManager();
+//        $project = $entityManager->getRepository(Projects::class)
+//                -> find($proj_id);
 
          $tick = $this -> getDoctrine ($id)
             -> getRepository ( Ticket :: class )
@@ -84,7 +84,7 @@ class TicketController extends AbstractController
 
 
          return $this -> render ( 'Ticket/edit.html.twig' , [
-                'form' => $form -> createView (), 'name' => $tick -> getName () , 'proj' => $project,
+                'form' => $form -> createView (), 'name' => $tick -> getName () ,// 'proj' => $project,
            ]);
      }
 
@@ -104,14 +104,14 @@ class TicketController extends AbstractController
       }
 
       /**
-      * @Route("/{proj_id}/Tick/{id}", name="ticket")
+      * @Route("/Tick/{id}", name="ticket")
       */
-     public function ticket ( $proj_id, Request $request, $id ) : Response
+     public function ticket ( Request $request, $id ) : Response
      {
-	  $entityManager = $this -> getDoctrine($proj_id)
-                -> getManager();
-        $project = $entityManager->getRepository(Projects::class)
-		-> find($proj_id);
+//         $entityManager = $this -> getDoctrine($proj_id)
+//                -> getManager();
+//         $project = $entityManager->getRepository(Projects::class)
+//		-> find($proj_id);
 
          $tick = $this -> getDoctrine ($id)
             -> getManager()
@@ -125,7 +125,7 @@ class TicketController extends AbstractController
 	 }
 
 	  return $this->render('Ticket/tick.html.twig', [
-              'proj' => $project,		  
+//              'proj' => $project,		  
               'tick' => $tick, ]);
     }
 }

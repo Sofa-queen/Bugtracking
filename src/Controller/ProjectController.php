@@ -32,8 +32,9 @@ class ProjectController extends AbstractController
             );
         }
 
-	return $this->render('Project/proj.html.twig', [
-            'proj' => $proj , ]);
+	return $this->render('Project/proj.html.twig', //[
+//            'proj' => $proj , ]);
+              array('proj' => $proj));
     }
  
     /**

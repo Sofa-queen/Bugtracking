@@ -23,19 +23,19 @@ app_projshow:
     controller: App\Controller\ProjectController::showt ()
 
 app_edittick:
-    path: /{proj_id}/editTick/{id}
+    path: /editTick/{id}
     controller: App\Controller\TicketController::edit ()
 
 app_newtick:
-    path: /{proj_id}/newTick
+    path: /newTick/{proj_id}
     controller: App\Controller\TicketController::new ()
 
 app_tick:
-    path: /{proj_id}/Tick/{id}
+    path: /Tick/{id}
     controller: App\Controller\TicketController::ticket ()
 
 app_comm:
-    path: /{proj_id}/Comment/{id}
+    path: /Comment/{id}
     controller: App\Controller\CommentController::comments ()
 
 app_newcomm:

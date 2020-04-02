@@ -44,27 +44,18 @@ class CommentController extends AbstractController
              return $this->redirectToRoute('comment', ['id' => $id]);
          }
 
-	 return $this->render('Ticket/newcomment.html.twig',// [
-//	     array('tick' => $tick),//);	 
-		 [
+	 return $this->render('Ticket/newcomment.html.twig', [
 	     'tick' => $tick,		 
 	     'comment' => $comment,
              'form' => $form->createView(),
          ]);
-//         }
      }
 
      /**
-      * @Route("/{proj_id}/Comment/{id}", name="comment")
+      * @Route("/Comment/{id}", name="comment")
       */
-     public function comments( $proj_id, Request $request, $id) : Response
+     public function comments( Request $request, $id) : Response
      {
-	  $entityManager = $this -> getDoctrine($proj_id)
-                -> getManager();
-        $project = $entityManager->getRepository(Projects::class)
-		-> find($proj_id);
-
-
 	 $tick = $this -> getDoctrine ($id)
             -> getManager()
             -> getRepository ( Ticket :: class )
@@ -75,8 +66,6 @@ class CommentController extends AbstractController
              ->findAll();
 
 	 return $this->render('Ticket/comment.html.twig', [
-		 //		 array('tick' => $tick));
-		     'proj' => $project,
 		     'tick' => $tick,
 		     'comment' => $comments,
          ]);

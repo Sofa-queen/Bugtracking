@@ -28,7 +28,7 @@
   </tbody>
  </table>
 </div>
-<div><button type="button" style="margin: 0px 0px 0px 600px" class="btn btn-success" onclick="location.href='{{ path( {'proj_id':proj.id}, 'comment', {'id':tick.id}) }}'">Comments</button></div>
-<div><button type="button" style="margin: 10px 0px 0px 1150px"  onclick="location.href='{{ path('show_project', {'id':proj.id}) }}'" class="btn btn-secondary">List of tickets</button><div>
+<div><button type="button" style="margin: 0px 0px 0px 600px" class="btn btn-success" onclick="location.href='{{ path( 'comment', {'id':tick.id}) }}'">Comments</button></div>
+{#<div><button type="button" style="margin: 10px 0px 0px 1150px"  onclick="location.href='{{ path('show_project', {'id':proj.id}) }}'" class="btn btn-secondary">List of tickets</button><div>#}
 {% endblock %}
 
