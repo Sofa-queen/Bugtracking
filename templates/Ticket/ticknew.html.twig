@@ -11,13 +11,12 @@
      {{ form_start ( form ) }}
       <div>
          {{ form_errors ( form ) }}
-      </div >
       <div>
               {{ form_label ( form.name , ' Name' ) }} <br>
               {{ form_widget ( form.name , { 'attr' : { 'class' : 'task_field' }} ) }}
        </ div >
        <div>
-             <br> {{ form_label ( form.type , ' Type' ) }} <br>
+              <br>{{ form_label ( form.type , ' Type' ) }}<br>
               {{ form_widget ( form.type , { 'attr' : { 'class' : 'task_field' }} ) }}
        </ div >
        <div>
@@ -27,6 +26,14 @@
        <div>
              <br> {{ form_label ( form.addressee , ' Addressee' ) }} <br>
               {{ form_widget ( form.addressee , { 'attr' : { 'class' : 'task_field' }} ) }}
+       </ div >
+       <div>
+             <br> {{ form_label ( form.description , ' Description' ) }} <br>
+              {{ form_widget ( form.description , { 'attr' : { 'class' : 'task_field' }} ) }}
+       </ div >
+       <div>
+             <br> {{ form_label ( form.file , ' File' ) }} <br>
+              {{ form_widget ( form.file , { 'attr' : { 'class' : 'task_field' }} ) }}
        </ div >
 
      {{ form_end ( form ) }}

@@ -60,10 +60,11 @@ class CommentController extends AbstractController
             -> getManager()
             -> getRepository ( Ticket :: class )
 	    -> find ( $id );   
-//	 $ticketId = $request->query->get('id');    
+//	 $ticketId = $request->query->get('id'); 
+        	 
          $comments = $this->getDoctrine()
-             ->getRepository(Comment::class)
-             ->findAll();
+             -> getRepository(Comment::class)
+             -> findAll ();
 
 	 return $this->render('Ticket/comment.html.twig', [
 		     'tick' => $tick,
