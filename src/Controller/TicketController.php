@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface ;
 use Symfony\Component\HttpFoundation\Request ;
 
+
 class TicketController extends AbstractController
 {
      /**
@@ -20,18 +21,25 @@ class TicketController extends AbstractController
      */
     public function new ( $proj_id, Request $request )
     {
-	 $entityManager = $this -> getDoctrine($proj_id)
+	 $users = $this->getDoctrine()
+            ->getRepository(User::class)
+	    ->findAll();
+
+	$entityManager = $this -> getDoctrine($proj_id)
                 -> getManager();
         $project = $entityManager->getRepository(Projects::class)
 		-> find($proj_id);
 
 	$ticket = new Ticket ();
-        $ticket -> setCreator ( 9 );
+//        $ticket -> setCreator ( 9 );
         $form = $this -> createForm ( TickType :: class , $ticket );
-                                      
+                                
 	$form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 	    $em = $this->getDoctrine()->getManager();
+            
+	    $creator = $entityManager->getRepository(User::class)->find($this->getUser()->getId());
+	    $creator = $entityManager->getRepository(User::class)->find($this->getUser()->getId()); 
 
             $tagsString = $request -> get('ticket')['tags_string'];
 	    $tags = array_map(function($value) { return trim($value); }, explode(',', $tagsString));
@@ -43,12 +51,14 @@ class TicketController extends AbstractController
 		    $ticket -> addTag($tag);
 	    }
 
-	    $project = $em -> getRepository(Projects::class) -> find($proj_id);
-	
+//	    $project = $em -> getRepository(Projects::class) -> find($proj_id);
+	  
+            $ticket->setCreator($creator);
 	    $ticket->setProject($project);
 
             $em -> persist($project);
-            $em -> persist($ticket);
+	    $em -> persist($ticket);
+	    $em -> persist($creator);
             $em -> flush();
 
             return $this->redirectToRoute('show_project', ['id' => $proj_id]);
@@ -57,7 +67,8 @@ class TicketController extends AbstractController
 
 	return $this -> render ( 'Ticket/ticknew.html.twig' , [
 		'proj' => $project,
-	        'ticket' => $ticket,      
+		'ticket' => $ticket,      
+		'users' => $users,
 		'form' => $form -> createView (),
         ]);
     }

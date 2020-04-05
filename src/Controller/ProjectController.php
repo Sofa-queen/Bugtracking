@@ -57,17 +57,21 @@ class ProjectController extends AbstractController
     public function new ( Request $request )
     {
 	$proj = new Projects ();
-        $user_id = $request->query->get('user_id');
-	$proj -> setAuthor ($user_id) ;
+        $author = $this->getUser()->getId();
+//        $user_id = $request->query->get('user_id');
+//	$proj -> setAuthor ($user_id) ;
 //	var_dump($user_id); die ;
 //	$proj -> setCreator ( 99 );
 	$form = $this -> createForm ( ProjType :: class , $proj );
       
          $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-           $em = $this->getDoctrine()->getManager();
-            $em->persist($proj);
-	   $em->flush();
+	    $em = $this->getDoctrine()->getManager();
+            $user = $em->getRepository(User::class)->find($author);
+	    $proj->setAuthor($user);
+	    $em->persist($proj);
+	    $em->persist($user);
+	    $em->flush();
 	   
             return $this->redirectToRoute('list_proj');
         }
