@@ -23,7 +23,7 @@ app_projshow:
     controller: App\Controller\ProjectController::showt ()
 
 app_edittick:
-    path: /editTick/{id}
+    path: /{project_id}/editTick/{id}
     controller: App\Controller\TicketController::edit ()
 
 app_newtick:

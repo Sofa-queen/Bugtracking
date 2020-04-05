@@ -57,6 +57,9 @@ class ProjectController extends AbstractController
     public function new ( Request $request )
     {
 	$proj = new Projects ();
+        $user_id = $request->query->get('user_id');
+	$proj -> setAuthor ($user_id) ;
+//	var_dump($user_id); die ;
 //	$proj -> setCreator ( 99 );
 	$form = $this -> createForm ( ProjType :: class , $proj );
       

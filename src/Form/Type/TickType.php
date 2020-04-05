@@ -35,9 +35,10 @@ class TickType extends AbstractType
                 'expanded' => true,
                 'multiple' => false
            ])
-            -> add('file', FileType::class, array('label' => 'Brochure (PDF file)')) 
+            -> add('file', FileType::class, array('label' => 'Brochure (PDF file)', 'required' => false)) 
 	    -> add ( 'addressee' , TextType :: class)
 	    -> add ( 'description' , TextType :: class)
+	    -> add('tags_string', TextType :: class, ['mapped' => false, 'required' => false])
         ;
     }
 

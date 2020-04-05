@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -51,6 +53,16 @@ class User implements UserInterface
      * @ORM\Column(type="json")
      */
     private $roles = [];
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Projects", mappedBy="author")
+     */
+    private $project;
+
+    public function __construct()
+    {
+        $this->project = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -129,4 +141,35 @@ class User implements UserInterface
     }
 
      public function eraseCredentials() { }
+
+     /**
+      * @return Collection|Projects[]
+      */
+     public function getProject(): Collection
+     {
+         return $this->project;
+     }
+
+     public function addProject(Projects $project): self
+     {
+         if (!$this->project->contains($project)) {
+             $this->project[] = $project;
+             $project->setAuthor($this);
+         }
+
+         return $this;
+     }
+
+     public function removeProject(Projects $project): self
+     {
+         if ($this->project->contains($project)) {
+             $this->project->removeElement($project);
+             // set the owning side to null (unless already changed)
+             if ($project->getAuthor() === $this) {
+                 $project->setAuthor(null);
+             }
+         }
+
+         return $this;
+     }
 }

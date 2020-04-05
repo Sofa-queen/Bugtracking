@@ -12,8 +12,8 @@
       <th scope="col">Type</th>
       <th scope="col">Status</th>
       <th scope="col">Description</th>
-      <th scope="col">file</th>
       <th scope="col">Tags</th>
+      <th scope="col">file</th>
     </tr>
   </thead>
   <tbody>
@@ -21,8 +21,12 @@
       <td>{{ tick.type }}</td>
       <td>{{ tick.status }}</td>
       <td>{{ tick.description }}</td>
+      <td> 
+         {% for tag in tick.tags %}
+            <a>{{ tag.name }}</a>
+         {% endfor %}
+      </td>
       <td>{{ tick.file }}</td>
-      <td> --- </td>
     </tr>
      {#% endfor %#}
   </tbody>

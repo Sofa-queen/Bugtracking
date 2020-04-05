@@ -8,7 +8,7 @@
     <h1>Comment on the {{ tick.name }}</h1>
     <div> 
        {% for comment in comment %}
-         <br> {{ comment.text }}<br>
+         <br> {{ comment.text }}  <button style="margin: 0px 0px 0px 20px" type="button" class="btn btn-outline-dark" onclick="location.href='{{ path('delete_com', {'id':comment.id}) }}'">Delete</button> <br>
        {% endfor %}
     </div>
     <br>

@@ -64,12 +64,28 @@ class CommentController extends AbstractController
         	 
          $comments = $this->getDoctrine()
              -> getRepository(Comment::class)
-             -> findAll ();
+             -> findByTicketld($id);
 
 	 return $this->render('Ticket/comment.html.twig', [
 		     'tick' => $tick,
 		     'comment' => $comments,
          ]);
      }
+
+     /**
+      * @Route("/delete_com/{id}", name="delete_com")
+      */
+     public function delete_com ( Request $request, $id ) : Response
+     {
+         $ticketId = $request->query->get('id');
+         $comment = $this -> getDoctrine ($id)
+            -> getRepository ( Comment :: class )
+            -> find ( $id );
+         $em = $this->getDoctrine()->getManager();
+         $em -> remove($comment);
+         $em -> flush();
+
+         return $this->redirectToRoute('comment', ['id' => $ticketId]);
+      }
 }
 

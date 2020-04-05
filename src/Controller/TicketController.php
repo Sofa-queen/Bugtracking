@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Tag;
 use App\Entity\Ticket;
 use App\Entity\User ;
 use App\Entity\Projects ;
@@ -26,13 +27,23 @@ class TicketController extends AbstractController
 
 	$ticket = new Ticket ();
         $ticket -> setCreator ( 9 );
-   //     $tick -> setProject (18);	
         $form = $this -> createForm ( TickType :: class , $ticket );
                                       
 	$form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 	    $em = $this->getDoctrine()->getManager();
-            $project = $em -> getRepository(Projects::class) -> find($proj_id);
+
+            $tagsString = $request -> get('ticket')['tags_string'];
+	    $tags = array_map(function($value) { return trim($value); }, explode(',', $tagsString));
+
+            foreach ($tags as $tagName) {
+		    $tag = new Tag();
+		    $tag -> setName($tagName);
+		    $em -> persist($tag);
+		    $ticket -> addTag($tag);
+	    }
+
+	    $project = $em -> getRepository(Projects::class) -> find($proj_id);
 	
 	    $ticket->setProject($project);
 
@@ -52,15 +63,15 @@ class TicketController extends AbstractController
     }
 
      /**
-      * @Route("/editTick/{id}", name="edit_ticket")
+      * @Route("/{project_id}/editTick/{id}", name="edit_ticket",  methods={"GET","POST"})
       */
-     public function edit ( Request $request, $id ) : Response
+     public function edit (  Request $request, $id, $project_id ) : Response
      {
-//	  $entityManager = $this -> getDoctrine($proj_id)
-//                -> getManager();
-//        $project = $entityManager->getRepository(Projects::class)
-//                -> find($proj_id);
-
+         $entityManager = $this -> getDoctrine($project_id)
+                -> getManager();
+         $project = $entityManager->getRepository(Projects::class)
+                -> find($project_id);
+//	 $projectId = $request->query->get('project_id');
          $tick = $this -> getDoctrine ($id)
             -> getRepository ( Ticket :: class )
             -> find ( $id );
@@ -79,28 +90,36 @@ class TicketController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($tick);
             $em->flush();
-            return $this->redirectToRoute('show_project', ['id' => $proj_id]);
+            return $this->redirectToRoute('show_project', ['id' => $project_id]);
          }
 
 
          return $this -> render ( 'Ticket/edit.html.twig' , [
-                'form' => $form -> createView (), 'name' => $tick -> getName () ,// 'proj' => $project,
+                'form' => $form -> createView (), 'name' => $tick -> getName () , 'proj' => $project,
            ]);
      }
 
       /**
-      * @Route("/delete_ticket/{id}", name="delete_ticket")
+      * @Route("/{project_id}/delete_ticket/{id}", name="delete_ticket")
       */
-     public function delete_tick ( Request $request, $id ) : Response
+     public function delete_tick ( Request $request, $id, $project_id ) : Response
      {
-         $tick = $this -> getDoctrine ($id)
+	   $projectId = $request->query->get('project_id');
+	   $tick = $this -> getDoctrine ($id)
             -> getRepository ( Ticket :: class )
-            -> find ( $id );
-         $em = $this->getDoctrine()->getManager();
-         $em -> remove($tick);
+	    -> find ( $id );
+
+	    if (!$tick) {
+		    throw $this->createNotFoundException(
+			    'No ticket found for id '.$id
+                );
+	    }
+         $em = $this->getDoctrine()->getManager();  
+	 $em -> remove($tick);
          $em -> flush();
 
-         return $this->redirectToRoute('show_project');
+
+         return $this->redirectToRoute('show_project', ['id' => $projectId]);
       }
 
       /**
