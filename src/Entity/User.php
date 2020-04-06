@@ -62,7 +62,7 @@ class User implements UserInterface
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="creator", orphanRemoval=true)
      */
-    private $tickets;
+    private $ticket;
      
      /**
      * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="addressee", orphanRemoval=true)
@@ -72,7 +72,7 @@ class User implements UserInterface
     public function __construct()
     {
         $this->project = new ArrayCollection();
-        $this->tickets = new ArrayCollection();
+        $this->ticket = new ArrayCollection();
         $this->ticket_addressee = new ArrayCollection();
     }
 
@@ -188,15 +188,15 @@ class User implements UserInterface
      /**
      * @return Collection|Ticket[]
      */
-    public function getTickets(): Collection
+    public function getTicket(): Collection
     {
-        return $this->tickets;
+        return $this->ticket;
     }
 
     public function addTicket(Ticket $ticket): self
     {
-        if (!$this->tickets->contains($ticket)) {
-            $this->tickets[] = $ticket;
+        if (!$this->ticket->contains($ticket)) {
+            $this->ticket[] = $ticket;
             $ticket->setCreator($this);
         }
 
@@ -205,8 +205,8 @@ class User implements UserInterface
 
     public function removeTicket(Ticket $ticket): self
     {
-        if ($this->tickets->contains($ticket)) {
-            $this->tickets->removeElement($ticket);
+        if ($this->ticket->contains($ticket)) {
+            $this->ticket->removeElement($ticket);
             // set the owning side to null (unless already changed)
             if ($ticket->getCreator() === $this) {
                 $ticket->setCreator(null);

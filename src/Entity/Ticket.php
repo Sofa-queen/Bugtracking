@@ -24,7 +24,7 @@ class Ticket
     private $name;
 
     /**
-      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tickets")
+      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="ticket")
      * @ORM\JoinColumn(nullable=false)
      */
     private $creator;
