@@ -24,7 +24,8 @@ class Ticket
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tickets")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $creator;
 
@@ -34,7 +35,9 @@ class Ticket
     private $type;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="ticket_addressee")
+     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="integer")
      */
     private $addressee;
 
@@ -86,12 +89,12 @@ class Ticket
         return $this;
     }
 
-    public function getCreator(): ?string
+    public function getCreator(): ?User
     {
         return $this->creator;
     }
 
-    public function setCreator(string $creator): self
+    public function setCreator(?User $creator): self
     {
         $this->creator = $creator;
 
@@ -110,12 +113,12 @@ class Ticket
         return $this;
     }
 
-    public function getAddressee(): ?string
+    public function getAddressee(): ?User
     {
         return $this->addressee;
     }
 
-    public function setAddressee(string $addressee): self
+    public function setAddressee(?User $addressee): self
     {
         $this->addressee = $addressee;
 

@@ -31,15 +31,17 @@ class TicketController extends AbstractController
 		-> find($proj_id);
 
 	$ticket = new Ticket ();
+        $creator = $this->getUser()->getId();
 //        $ticket -> setCreator ( 9 );
         $form = $this -> createForm ( TickType :: class , $ticket );
                                 
 	$form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 	    $em = $this->getDoctrine()->getManager();
-            
-	    $creator = $entityManager->getRepository(User::class)->find($this->getUser()->getId());
-	    $creator = $entityManager->getRepository(User::class)->find($this->getUser()->getId()); 
+
+	    $user = $em->getRepository(User::class)->find($creator);
+//	    $creator = $entityManager->getRepository(User::class)->find($this->getUser()->getId());
+//	    $creator = $entityManager->getRepository(User::class)->find($this->getUser()->getId()); 
 
             $tagsString = $request -> get('ticket')['tags_string'];
 	    $tags = array_map(function($value) { return trim($value); }, explode(',', $tagsString));
@@ -51,14 +53,14 @@ class TicketController extends AbstractController
 		    $ticket -> addTag($tag);
 	    }
 
-//	    $project = $em -> getRepository(Projects::class) -> find($proj_id);
+	    $project = $em -> getRepository(Projects::class) -> find($proj_id);
 	  
-            $ticket->setCreator($creator);
+            $ticket->setCreator($user);
 	    $ticket->setProject($project);
 
             $em -> persist($project);
 	    $em -> persist($ticket);
-	    $em -> persist($creator);
+	    $em -> persist($user);
             $em -> flush();
 
             return $this->redirectToRoute('show_project', ['id' => $proj_id]);

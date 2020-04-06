@@ -58,10 +58,6 @@ class ProjectController extends AbstractController
     {
 	$proj = new Projects ();
         $author = $this->getUser()->getId();
-//        $user_id = $request->query->get('user_id');
-//	$proj -> setAuthor ($user_id) ;
-//	var_dump($user_id); die ;
-//	$proj -> setCreator ( 99 );
 	$form = $this -> createForm ( ProjType :: class , $proj );
       
          $form->handleRequest($request);

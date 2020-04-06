@@ -58,10 +58,22 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\Projects", mappedBy="author")
      */
     private $project;
+      
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="creator", orphanRemoval=true)
+     */
+    private $tickets;
+     
+     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="addressee", orphanRemoval=true)
+     */
+    private $ticket_addressee;
 
     public function __construct()
     {
         $this->project = new ArrayCollection();
+        $this->tickets = new ArrayCollection();
+        $this->ticket_addressee = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -172,4 +184,65 @@ class User implements UserInterface
 
          return $this;
      }
+
+     /**
+     * @return Collection|Ticket[]
+     */
+    public function getTickets(): Collection
+    {
+        return $this->tickets;
+    }
+
+    public function addTicket(Ticket $ticket): self
+    {
+        if (!$this->tickets->contains($ticket)) {
+            $this->tickets[] = $ticket;
+            $ticket->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicket(Ticket $ticket): self
+    {
+        if ($this->tickets->contains($ticket)) {
+            $this->tickets->removeElement($ticket);
+            // set the owning side to null (unless already changed)
+            if ($ticket->getCreator() === $this) {
+                $ticket->setCreator(null);
+            }
+        }
+         return $this;
+    }
+
+     /**
+     * @return Collection|Ticket[]
+     */
+    public function getTicketAddressee(): Collection
+    {
+        return $this->ticket_addressee;
+    }
+
+    public function addTicketAddressee(Ticket $ticketAddressee): self
+    {
+        if (!$this->ticket_addressee->contains($ticketAddressee)) {
+            $this->ticket_addressee[] = $ticketAddressee;
+            $ticketAddressee->setAddressee($this);
+        }
+
+        return $this;
+    }
+
+        public function removeTicketAddressee(Ticket $ticketAddressee): self
+    {
+        if ($this->ticket_addressee->contains($ticketAddressee)) {
+            $this->ticket_addressee->removeElement($ticketAddressee);
+            // set the owning side to null (unless already changed)
+            if ($ticketAddressee->getAddressee() === $this) {
+                $ticketAddressee->setAddressee(null);
+            }
+        }
+
+        return $this;
+    }
 }
