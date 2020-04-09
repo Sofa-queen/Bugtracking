@@ -22,14 +22,16 @@ class Comment
     private $text;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Ticket", inversedBy="comments")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $ticketId;
+    private $ticket;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $userId;
+    private $creator;
 
     public function getId(): ?int
     {
@@ -48,26 +50,26 @@ class Comment
         return $this;
     }
 
-    public function getTicketId(): ?int
+    public function getTicket(): ?Ticket
     {
-        return $this->ticketId;
+        return $this->ticket;
     }
 
-    public function setTicketId(int $ticketId): self
+    public function setTicket(?Ticket $ticket): self
     {
-        $this->ticketId = $ticketId;
+        $this->ticket = $ticket;
 
         return $this;
     }
 
-    public function getUserId(): ?int
+    public function getCreator(): ?User
     {
-        return $this->userId;
+        return $this->creator;
     }
 
-    public function setUserId(int $userId): self
+    public function setCreator(?User $creator): self
     {
-        $this->userId = $userId;
+        $this->creator = $creator;
 
         return $this;
     }

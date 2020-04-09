@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TicketRepository")
@@ -24,32 +25,43 @@ class Ticket
     private $name;
 
     /**
-      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="ticket")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $creator;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $type;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $status;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     */
+    private $description;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="ticket")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $creator;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="ticket_addressee")
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
      */
     private $addressee;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $description;
+    private $file;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", inversedBy="tickets")
      */
-    private $file;
+    private $tags;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Projects", inversedBy="ticket")
@@ -58,18 +70,14 @@ class Ticket
     private $project;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="ticket")
      */
-    private $status;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", mappedBy="ticket")
-     */
-    private $tags;
+    private $comments;
 
     public function __construct()
     {
         $this->tags = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -89,18 +97,6 @@ class Ticket
         return $this;
     }
 
-    public function getCreator(): ?User
-    {
-        return $this->creator;
-    }
-
-    public function setCreator(?User $creator): self
-    {
-        $this->creator = $creator;
-
-        return $this;
-    }
-
     public function getType(): ?string
     {
         return $this->type;
@@ -109,54 +105,6 @@ class Ticket
     public function setType(string $type): self
     {
         $this->type = $type;
-
-        return $this;
-    }
-
-    public function getAddressee(): ?User
-    {
-        return $this->addressee;
-    }
-
-    public function setAddressee(?User $addressee): self
-    {
-        $this->addressee = $addressee;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    public function getFile(): ?string
-    {
-        return $this->file;
-    }
-
-    public function setFile(?string $file): self
-    {
-        $this->file = $file;
-
-        return $this;
-    }
-
-    public function getProject(): ?Projects
-    {
-        return $this->project;
-    }
-
-    public function setProject(?Projects $project): self
-    {
-        $this->project = $project;
 
         return $this;
     }
@@ -173,6 +121,54 @@ class Ticket
         return $this;
     }
 
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): self
+    {
+        $this->creator = $creator;
+
+        return $this;
+    }
+
+    public function getAddressee(): ?User
+    {
+        return $this->addressee;
+    }
+
+    public function setAddressee(?User $addressee): self
+    {
+        $this->addressee = $addressee;
+
+        return $this;
+    }
+
+    public function getFile(): ?string
+    {
+        return $this->file;
+    }
+
+    public function setFile(?string $file): self
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Tag[]
      */
@@ -185,7 +181,6 @@ class Ticket
     {
         if (!$this->tags->contains($tag)) {
             $this->tags[] = $tag;
-            $tag->addTicket($this);
         }
 
         return $this;
@@ -195,11 +190,52 @@ class Ticket
     {
         if ($this->tags->contains($tag)) {
             $this->tags->removeElement($tag);
-            $tag->removeTicket($this);
         }
 
         return $this;
     }
 
-    
+    public function getProject(): ?Projects
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Projects $project): self
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setTicket($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getTicket() === $this) {
+                $comment->setTicket(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

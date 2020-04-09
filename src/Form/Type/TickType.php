@@ -42,7 +42,7 @@ class TickType extends AbstractType
                     'choice_label' => 'username',
             ])
 	    -> add ( 'description' , TextType :: class)
-	    -> add('tags_string', TextType :: class, ['mapped' => false, 'required' => false])
+	    -> add('tags_string', TextType :: class, ['mapped' => false])
         ;
     }
 

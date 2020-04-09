@@ -24,13 +24,13 @@ class Tag
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Ticket", inversedBy="tags")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Ticket", mappedBy="tags")
      */
-    private $ticket;
+    private $tickets;
 
     public function __construct()
     {
-        $this->ticket = new ArrayCollection();
+        $this->tickets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -53,15 +53,16 @@ class Tag
     /**
      * @return Collection|Ticket[]
      */
-    public function getTicket(): Collection
+    public function getTickets(): Collection
     {
-        return $this->ticket;
+        return $this->tickets;
     }
 
     public function addTicket(Ticket $ticket): self
     {
-        if (!$this->ticket->contains($ticket)) {
-            $this->ticket[] = $ticket;
+        if (!$this->tickets->contains($ticket)) {
+            $this->tickets[] = $ticket;
+            $ticket->addTag($this);
         }
 
         return $this;
@@ -69,8 +70,9 @@ class Tag
 
     public function removeTicket(Ticket $ticket): self
     {
-        if ($this->ticket->contains($ticket)) {
-            $this->ticket->removeElement($ticket);
+        if ($this->tickets->contains($ticket)) {
+            $this->tickets->removeElement($ticket);
+            $ticket->removeTag($this);
         }
 
         return $this;

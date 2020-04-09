@@ -26,7 +26,7 @@ class Projects
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="project")
      */
-    private $ticket;
+//    private $ticket;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="project")
@@ -34,11 +34,22 @@ class Projects
      */
     private $author;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="project")
+     */
+    private $ticket;
+
     public function __construct()
     {
         $this->ticket = new ArrayCollection();
     }
 
+
+ /*   public function __construct()
+    {
+        $this->ticket = new ArrayCollection();
+    }
+*/
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +63,49 @@ class Projects
     public function setNameProj(string $name_proj): self
     {
         $this->name_proj = $name_proj;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Ticket[]
+     */
+/*    public function getTicket(): Collection
+    {
+        return $this->ticket;
+    }
+
+    public function addTicket(Ticket $ticket): self
+    {
+        if (!$this->ticket->contains($ticket)) {
+            $this->ticket[] = $ticket;
+            $ticket->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicket(Ticket $ticket): self
+    {
+        if ($this->ticket->contains($ticket)) {
+            $this->ticket->removeElement($ticket);
+            // set the owning side to null (unless already changed)
+            if ($ticket->getProject() === $this) {
+                $ticket->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+*/
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }
@@ -83,18 +137,6 @@ class Projects
                 $ticket->setProject(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getAuthor(): ?User
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(?User $author): self
-    {
-        $this->author = $author;
 
         return $this;
     }

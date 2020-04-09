@@ -58,22 +58,26 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\Projects", mappedBy="author")
      */
     private $project;
-      
+
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="creator", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="creator")
      */
     private $ticket;
-     
-     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="addressee", orphanRemoval=true)
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Ticket", mappedBy="addressee")
      */
     private $ticket_addressee;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="creator")
+     */
+    private $comments;
 
     public function __construct()
     {
         $this->project = new ArrayCollection();
-        $this->ticket = new ArrayCollection();
-        $this->ticket_addressee = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -129,23 +133,16 @@ class User implements UserInterface
         //return $this;
     }
     
+    /**
+     * @see UserInterface
+     */
     public function getRoles() : array
     {
        $roles = $this -> roles;
        $roles [] = 'ROLE_USER' ;
-
+       $roles [] = 'ROLE_USER_' . $this->id;
        return array_unique ( $roles );
     }
-
-//    public function setRoles()
-//    {
-//        return $this->roles;
-//    }
-
-//    public function getRoles()
-//    {
-//        return array('ROLE_USER','ROLE ADMIN');
-//    }
 
     public function getSalt()
     {
@@ -186,63 +183,95 @@ class User implements UserInterface
      }
 
      /**
-     * @return Collection|Ticket[]
-     */
-    public function getTicket(): Collection
-    {
-        return $this->ticket;
-    }
+      * @return Collection|Ticket[]
+      */
+     public function getTicket(): Collection
+     {
+         return $this->ticket;
+     }
 
-    public function addTicket(Ticket $ticket): self
-    {
-        if (!$this->ticket->contains($ticket)) {
-            $this->ticket[] = $ticket;
-            $ticket->setCreator($this);
-        }
+     public function addTicket(Ticket $ticket): self
+     {
+         if (!$this->ticket->contains($ticket)) {
+             $this->ticket[] = $ticket;
+             $ticket->setCreator($this);
+         }
 
-        return $this;
-    }
-
-    public function removeTicket(Ticket $ticket): self
-    {
-        if ($this->ticket->contains($ticket)) {
-            $this->ticket->removeElement($ticket);
-            // set the owning side to null (unless already changed)
-            if ($ticket->getCreator() === $this) {
-                $ticket->setCreator(null);
-            }
-        }
          return $this;
-    }
+     }
+
+     public function removeTicket(Ticket $ticket): self
+     {
+         if ($this->ticket->contains($ticket)) {
+             $this->ticket->removeElement($ticket);
+             // set the owning side to null (unless already changed)
+             if ($ticket->getCreator() === $this) {
+                 $ticket->setCreator(null);
+             }
+         }
+
+         return $this;
+     }
 
      /**
-     * @return Collection|Ticket[]
-     */
-    public function getTicketAddressee(): Collection
-    {
-        return $this->ticket_addressee;
-    }
+      * @return Collection|Ticket[]
+      */
+     public function getTicketAddressee(): Collection
+     {
+         return $this->ticket_addressee;
+     }
 
-    public function addTicketAddressee(Ticket $ticketAddressee): self
-    {
-        if (!$this->ticket_addressee->contains($ticketAddressee)) {
-            $this->ticket_addressee[] = $ticketAddressee;
-            $ticketAddressee->setAddressee($this);
-        }
+     public function addTicketAddressee(Ticket $ticketAddressee): self
+     {
+         if (!$this->ticket_addressee->contains($ticketAddressee)) {
+             $this->ticket_addressee[] = $ticketAddressee;
+             $ticketAddressee->setAddressee($this);
+         }
 
-        return $this;
-    }
+         return $this;
+     }
 
-        public function removeTicketAddressee(Ticket $ticketAddressee): self
-    {
-        if ($this->ticket_addressee->contains($ticketAddressee)) {
-            $this->ticket_addressee->removeElement($ticketAddressee);
-            // set the owning side to null (unless already changed)
-            if ($ticketAddressee->getAddressee() === $this) {
-                $ticketAddressee->setAddressee(null);
-            }
-        }
+     public function removeTicketAddressee(Ticket $ticketAddressee): self
+     {
+         if ($this->ticket_addressee->contains($ticketAddressee)) {
+             $this->ticket_addressee->removeElement($ticketAddressee);
+             // set the owning side to null (unless already changed)
+             if ($ticketAddressee->getAddressee() === $this) {
+                 $ticketAddressee->setAddressee(null);
+             }
+         }
 
-        return $this;
-    }
+         return $this;
+     }
+
+     /**
+      * @return Collection|Comment[]
+      */
+     public function getComments(): Collection
+     {
+         return $this->comments;
+     }
+
+     public function addComment(Comment $comment): self
+     {
+         if (!$this->comments->contains($comment)) {
+             $this->comments[] = $comment;
+             $comment->setCreator($this);
+         }
+
+         return $this;
+     }
+
+     public function removeComment(Comment $comment): self
+     {
+         if ($this->comments->contains($comment)) {
+             $this->comments->removeElement($comment);
+             // set the owning side to null (unless already changed)
+             if ($comment->getCreator() === $this) {
+                 $comment->setCreator(null);
+             }
+         }
+
+         return $this;
+     }
 }

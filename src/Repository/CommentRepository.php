@@ -19,16 +19,6 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
-public function findByTicketld($ticketId)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.ticketId = :ticketId')
-            ->setParameter('ticketId', $ticketId)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
     // /**
     //  * @return Comment[] Returns an array of Comment objects
     //  */

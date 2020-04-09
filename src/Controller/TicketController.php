@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request ;
 class TicketController extends AbstractController
 {
      /**
-     * @Route("/newTick/{proj_id}", name="creat_ticket")
+     * @Route("/newTick/{proj_id}", name="creat_ticket", methods={"GET","POST"})
      */
     public function new ( $proj_id, Request $request )
     {
@@ -32,26 +32,23 @@ class TicketController extends AbstractController
 
 	$ticket = new Ticket ();
         $creator = $this->getUser()->getId();
-//        $ticket -> setCreator ( 9 );
         $form = $this -> createForm ( TickType :: class , $ticket );
-                                
-	$form->handleRequest($request);
+     	$form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
 	    $em = $this->getDoctrine()->getManager();
 
 	    $user = $em->getRepository(User::class)->find($creator);
-//	    $creator = $entityManager->getRepository(User::class)->find($this->getUser()->getId());
-//	    $creator = $entityManager->getRepository(User::class)->find($this->getUser()->getId()); 
 
             $tagsString = $request -> get('ticket')['tags_string'];
 	    $tags = array_map(function($value) { return trim($value); }, explode(',', $tagsString));
 
             foreach ($tags as $tagName) {
 		    $tag = new Tag();
-		    $tag -> setName($tagName);
-		    $em -> persist($tag);
+          	    $tag -> setName($tagName);
+	            $em -> persist($tag);
 		    $ticket -> addTag($tag);
-	    }
+	    }        
 
 	    $project = $em -> getRepository(Projects::class) -> find($proj_id);
 	  
@@ -132,7 +129,7 @@ class TicketController extends AbstractController
          $em -> flush();
 
 
-         return $this->redirectToRoute('show_project', ['id' => $projectId]);
+         return $this->redirectToRoute('show_project', ['id' => $project_id]);
       }
 
       /**
