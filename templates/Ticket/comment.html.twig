@@ -11,13 +11,13 @@
          <br>
          <p style=" font-weight: bold;  margin: 0px 200px 0px 0px; font-style: italic;">{{ comment.creator.username}} : </p>{{ comment.text }}
             {% if is_granted('ROLE_USER_' ~ comment.creator.id) or is_granted('ROLE_ADMIN') %} 
-            <button style="margin: 0px 0px 0px 20px" type="button" class="btn btn-outline-dark" onclick="location.href='{{ path('delete_com', {'tick_id':tick.id, 'id':comment.id}) }}'">Delete</button> <br>
+            <button style="margin: 0px 0px 0px 20px" type="button" class="btn btn-outline-dark" onclick="location.href='{{ path('delete_com', {'proj_id':proj.id, 'tick_id':tick.id, 'id':comment.id}) }}'">Delete</button> <br>
          {% endif %}
        {% endfor %}
     </div>
     <br>
-    <button type="submit" onclick="location.href='{{ path('newcomment', {'id':tick.id}) }}'" class="btn btn-success">Add comment</button>
+    <button type="submit" onclick="location.href='{{ path('newcomment', {'proj_id':proj.id, 'id':tick.id}) }}'" class="btn btn-success">Add comment</button>
   </div>
-<div><button type="button" style="margin: 10px 0px 0px 1150px"  onclick="location.href='{{ path('ticket', {'id':tick.id}) }}'" class="btn btn-secondary">Back</button><div>
+<div><button type="button" style="margin: 10px 0px 0px 1150px"  onclick="location.href='{{ path('ticket', {'proj_id':proj.id, 'id':tick.id}) }}'" class="btn btn-secondary">Back</button><div>
 {% endblock %}
 

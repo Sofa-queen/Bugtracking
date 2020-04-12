@@ -8,31 +8,35 @@
        <H1 align="center">{{ tick.name }}</H1>
        <table class="table table-hover table-dark">
   <thead>
-    <tr>
+    <tr align="center">
+      <th scope="col">Creator</th>
       <th scope="col">Type</th>
       <th scope="col">Status</th>
       <th scope="col">Description</th>
       <th scope="col">Tags</th>
       <th scope="col">file</th>
+      <th scope="col">Addressee</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
+    <tr align="center">
+      <td>{{ tick.creator.username }}</td>
       <td>{{ tick.type }}</td>
       <td>{{ tick.status }}</td>
-      <td>{{ tick.description }}</td>
+      <td width= 100px;>{{ tick.description }}</td>
       <td> 
          {% for tag in tick.tags %}
             <a>{{ tag.name }}</a>
          {% endfor %}
       </td>
-      <td>{{ tick.file }}</td>
+      <td><a style="color: white;" href="{{ asset('uploads/file/' ~ tick.brochureFilename) }}">Attachment</a></td>
+      <td>{{ tick.addressee.username }}</td>
     </tr>
      {#% endfor %#}
   </tbody>
  </table>
 </div>
-<div><button type="button" style="margin: 0px 0px 0px 600px" class="btn btn-success" onclick="location.href='{{ path( 'comment', {'id':tick.id}) }}'">Comments</button></div>
-{#<div><button type="button" style="margin: 10px 0px 0px 1150px"  onclick="location.href='{{ path('show_project', {'id':proj.id}) }}'" class="btn btn-secondary">List of tickets</button><div>#}
+<div><button type="button" style="margin: 0px 0px 0px 600px" class="btn btn-success" onclick="location.href='{{ path( 'comment', {'proj_id':proj.id, 'id':tick.id}) }}'">Comments</button></div>
+<div><button type="button" style="margin: 10px 0px 0px 1150px"  onclick="location.href='{{ path('show_project', {'id':proj.id}) }}'" class="btn btn-secondary">List of tickets</button><div>
 {% endblock %}
 

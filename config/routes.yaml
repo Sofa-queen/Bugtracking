@@ -31,15 +31,15 @@ app_newtick:
     controller: App\Controller\TicketController::new ()
 
 app_tick:
-    path: /Tick/{id}
+    path: /{proj_id}/Tick/{id}
     controller: App\Controller\TicketController::ticket ()
 
 app_comm:
-    path: /Comment/{id}
+    path: /{proj_id}/Comment/{id}
     controller: App\Controller\CommentController::comments ()
 
 app_newcomm:
-    path: /newc_comment/{id}
+    path: /{proj_id}/newc_comment/{id}
     controller: App\Controller\CommentController::newcomment ()
 
 #routing_distributed:

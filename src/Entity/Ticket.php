@@ -53,10 +53,10 @@ class Ticket
      */
     private $addressee;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     /**
+     * @ORM\Column(type="string")
      */
-    private $file;
+    private $brochureFilename ;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Tag", inversedBy="tickets")
@@ -157,16 +157,16 @@ class Ticket
         return $this;
     }
 
-    public function getFile(): ?string
+    public function getBrochureFilename ()
     {
-        return $this->file;
+        return $this -> brochureFilename ;
     }
 
-    public function setFile(?string $file): self
+    public function setBrochureFilename ( $brochureFilename )
     {
-        $this->file = $file;
+        $this -> brochureFilename = $brochureFilename ;
 
-        return $this;
+        return $this ;
     }
 
     /**

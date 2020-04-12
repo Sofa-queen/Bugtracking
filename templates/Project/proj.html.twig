@@ -25,11 +25,11 @@
    {% for ticket in proj.ticket %}
     <tr>
       <td>{{ ticket.id }}</td>
-      <td><a style="color: white;" href="{{ path( 'ticket', {'id':ticket.id}) }}" >{{ ticket.name }}</a></td>
+      <td><a style="color: white;" href="{{ path( 'ticket', {'proj_id':proj.id, 'id':ticket.id}) }}" >{{ ticket.name }}</a></td>
       <td>{{ ticket.creator.username }}</td>
       <td>{{ ticket.addressee.username }}</td>
       {% if is_granted('ROLE_USER_' ~ ticket.creator.id) or is_granted("ROLE_ADMIN") %}
-          <td> <button type="button" class="btn btn-outline-light" onclick="location.href='{{ path( 'edit_ticket', {'id':ticket.id, 'project_id':proj.id}) }}'">Edit</button> </td>
+          <td> <button type="button" class="btn btn-outline-light" onclick="location.href='{{ path( 'edit_ticket', { 'id':ticket.id, 'project_id':proj.id}) }}'">Edit</button> </td>
           <td> <button type="button" class="btn btn-outline-light" onclick="location.href='{{ path('delete_ticket', {'id':ticket.id, 'project_id':proj.id}) }}'">Delete</button> </td>
        {% endif %}
     </tr>

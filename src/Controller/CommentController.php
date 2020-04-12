@@ -17,10 +17,15 @@ class CommentController extends AbstractController
 {
 
      /**
-      * @Route("/new_comment/{id}", name="newcomment")
+      * @Route("/{proj_id}/new_comment/{id}", name="newcomment")
       */
-     public function newcomment ( Request $request, $id ) : Response
+     public function newcomment ($proj_id, Request $request, $id ) : Response
      {
+	 $entityManager = $this-> getDoctrine($proj_id)
+                -> getManager();
+         $proj = $entityManager->getRepository(Projects::class)
+		 -> find($proj_id);
+
          $users = $this->getDoctrine()
             -> getRepository(User::class)
 	    -> findAll();
@@ -51,21 +56,27 @@ class CommentController extends AbstractController
              $entityManager -> persist($comment);
              $entityManager -> flush();
 
-             return $this->redirectToRoute('comment', ['id' => $id]);
+             return $this->redirectToRoute('comment', ['proj_id' => $proj_id, 'id' => $id]);
          }
 
 	 return $this->render('Ticket/newcomment.html.twig', [
 	     'tick' => $tick,		 
 	     'comment' => $comment,
-             'form' => $form->createView(),
+	     'form' => $form->createView(),
+	     'proj' => $proj,
          ]);
      }
 
      /**
-      * @Route("/Comment/{id}", name="comment")
+      * @Route("/{proj_id}/Comment/{id}", name="comment")
       */
-     public function comments( Request $request, $id) : Response
+     public function comments($proj_id, Request $request, $id) : Response
      {
+	 $entityManager = $this-> getDoctrine($proj_id)
+                -> getManager();
+         $proj = $entityManager->getRepository(Projects::class)
+		 -> find($proj_id);
+
          $user = $this->getUser()->getId();
 	 $tick = $this -> getDoctrine ($id)
             -> getManager()
@@ -81,14 +92,20 @@ class CommentController extends AbstractController
 		     'tick' => $tick,
 		     'comment' => $comments,
 		     'user' => $user,
+		     'proj' => $proj,
          ]);
      }
 
      /**
-      * @Route("/{tick_id}/delete_com/{id}", name="delete_com")
+      * @Route("/{proj_id}/{tick_id}/delete_com/{id}", name="delete_com")
       */
-     public function delete_com ($tick_id, Request $request, $id ) : Response
+     public function delete_com ($proj_id, $tick_id, Request $request, $id ) : Response
      {
+	  $entityManager = $this-> getDoctrine($proj_id)
+                -> getManager();
+          $proj = $entityManager->getRepository(Projects::class)
+		 -> find($proj_id);
+
 	  $tick = $this -> getDoctrine ($tick_id)
             -> getManager()
             -> getRepository ( Ticket :: class )
@@ -107,13 +124,14 @@ class CommentController extends AbstractController
             $em -> remove($comment);
             $em -> flush();
          
-            return $this->redirectToRoute('comment', ['id' => $tick_id]);
+            return $this->redirectToRoute('comment', ['proj_id' => $proj_id, 'id' => $tick_id]);
          }
 
 	  return $this->render('Ticket/comment.html.twig', [
                      'tick' => $tick,
-                     'comment' => $comments,
-         ]);
+		     'comment' => $comments,
+		     'proj' => $proj,
+     		    ]);
  
       }
 }

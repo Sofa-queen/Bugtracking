@@ -12,14 +12,16 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface ;
 use Symfony\Component\HttpFoundation\Request ;
-
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TicketController extends AbstractController
 {
      /**
      * @Route("/newTick/{proj_id}", name="creat_ticket", methods={"GET","POST"})
      */
-    public function new ( $proj_id, Request $request ) : Response
+    public function new ( $proj_id, Request $request, SluggerInterface $slugger ) : Response
     {
         $users = $this-> getDoctrine()
             -> getRepository(User::class)
@@ -65,6 +67,27 @@ class TicketController extends AbstractController
 	        }        
              }
 
+	    /** @var UploadedFile $brochureFile */
+
+            $brochureFile = $form->get('brochureFilename')->getData();
+            if ($brochureFile) {
+		    $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+                    try {
+                       $brochureFile->move(
+                          $this->getParameter('files_directory'),
+                          $newFilename
+                       );
+		    } 
+		    catch (FileException $e) {
+	                throw $this->createNotFoundException(
+                           'File does not upload' . $e
+                        );
+		    }
+		    $ticket->setBrochureFilename($newFilename);
+	    }
+
             $em -> flush();
 
           return $this-> redirectToRoute('show_project', ['id' => $proj_id]);
@@ -82,7 +105,7 @@ class TicketController extends AbstractController
      /**
       * @Route("/{project_id}/editTick/{id}", name="edit_ticket",  methods={"GET","POST"})
       */
-     public function edit (  Request $request, $id, $project_id ) : Response
+     public function edit (  Request $request, $id, $project_id, SluggerInterface $slugger ) : Response
      {
          $entityManager = $this-> getDoctrine($project_id)
                 -> getManager();
@@ -127,6 +150,27 @@ class TicketController extends AbstractController
                     $em-> persist($tag);
                     $tick-> addTag($tag);
                 }
+	    }
+
+	    /** @var UploadedFile $brochureFile */
+
+            $brochureFile = $form->get('brochureFilename')->getData();
+            if ($brochureFile) {
+                    $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+                    try {
+                       $brochureFile->move(
+                          $this->getParameter('files_directory'),
+                          $newFilename
+                       );
+                    }
+                    catch (FileException $e) {
+                        throw $this->createNotFoundException(
+                           'File does not upload' . $e
+                        );
+                    }
+                    $tick->setBrochureFilename($newFilename);
             }
 
             $em-> flush();
@@ -163,10 +207,15 @@ class TicketController extends AbstractController
       }
 
       /**
-      * @Route("/Tick/{id}", name="ticket")
+      * @Route("/{proj_id}/Tick/{id}", name="ticket")
       */
-     public function ticket ( Request $request, $id ) : Response
-     {
+     public function ticket ( $proj_id, Request $request, $id ) : Response
+     { 
+         $entityManager = $this-> getDoctrine($proj_id)
+                -> getManager();
+         $proj = $entityManager->getRepository(Projects::class)
+		 -> find($proj_id);
+
          $tick = $this -> getDoctrine ($id)
             -> getManager()
             -> getRepository ( Ticket :: class )
@@ -179,6 +228,8 @@ class TicketController extends AbstractController
 	 }
 
 	  return $this->render('Ticket/tick.html.twig', [		  
-              'tick' => $tick, ]);
+		  'tick' => $tick,
+	          'proj' => $proj,
+	  ]);
     }
 }
