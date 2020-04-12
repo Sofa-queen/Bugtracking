@@ -25,7 +25,6 @@ class TickType extends AbstractType
 //		    'expanded' => true,
 //		    'multiple' => false,
 	    ]) 
-//	    -> add ( 'status' , TextType :: class)
             -> add('status', ChoiceType::class, [
                 'choices' => [
                         'New' => 'new',
