@@ -23,7 +23,7 @@
     <tr>
       <td>{{ project.id }}</td>
       <td><a style="color: white;" href="{{ path('show_project', {'id':project.id}) }}">{{ project.nameProj }}</a></td>
-      <td>{{ project.author.id }}</td>
+      <td>{{ project.author.username }}</td>
       {% if  is_granted('ROLE_ADMIN')  or is_granted('ROLE_USER_' ~ project.author.id)  %}
           <td> <button type="button" class="btn btn-outline-light" onclick="location.href='{{ path('edit_proj', {'id':project.id}) }}'">Edit</button> </td>
           <td> <button type="button" class="btn btn-outline-light" onclick="location.href='{{ path('delete_proj', {'id':project.id}) }}'">Delete</button> </td>
