@@ -2,6 +2,10 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
+app_myStaff:
+    path: /my_staff
+    controller: App\Controller\MyStaffController::my ()
+
 app_creatProj:
     path: /createProj
     controller: App\Controller\ProjectController::new ()

@@ -42,12 +42,19 @@ class ProjectController extends AbstractController
      */
     public function listProj () : Response
     {
+        $userid = $this-> getUser()-> getId();
+
+        $user = $this-> getDoctrine($userid)
+            -> getRepository(User::class)
+            -> find ($userid);
+
         $proj = $this -> getDoctrine()
 	    -> getManager()
 	    -> getRepository ( Projects :: class )
 	    -> findAll();
         return $this->render('Project/number.html.twig', array(
-            'project' => $proj
+		'project' => $proj,
+		'user' => $user,
     ));
     }
 
