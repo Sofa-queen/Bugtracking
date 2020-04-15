@@ -25,38 +25,19 @@ class TicketRepository extends ServiceEntityRepository
       * @return Ticket[] Returns an array of Ticket objects
       */
     
-    public function findByExampleField($user)
+    public function findByExampleField($userid)
     {
-      /*  return $this->createQueryBuilder('tk')
-            ->andWhere('tk.id LIKE :searchTerm
-	         OR tk.name LIKE :searchTerm
-	         OR tk.status LIKE :searchTerm')
-            ->leftJoin( 'tk.tags' , 'tg' )
-            ->setParameter('searchTerm', '%' .$term. '%')
-         //   ->orderBy('t.id', 'ASC')
-         //   ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-	    ;*/
-	 $tick = $this-> createQueryBuilder('tk')
-              ->select('tk')
-             // ->from(Ticket::class, 'tk')
-              ->innerJoin(Tag::class, 'tg', 'with', 'tg.tickets = tk.id')
-              ->innerJoin(Comment::class, 'c', 'with', 'tk.id = c.ticket')
-              ->where('tk.creator = '.$user->getId())
-              ->orderBy('tk.id', 'ASC')
-              ->getQuery()
-	      ->getResult();
-
-         /*  return $this->createQueryBuilder('t')
-	      ->select('t')
-              //->from(Ticket::class, 't')
-              ->innerJoin(Tag::class, 'ta', 'with', 't.id = ta.tickets')
-              ->innerJoin(Comment::class, 'c', 'with', 't.id = c.ticket')
-              ->where('t.creator = '.$user->getId())
-              ->orderBy('t.id', 'ASC')
-              ->getQuery()
-	      ->getResult(); */
+	    return $this->createQueryBuilder('t')
+	        ->select('t, COUNT(c.id)') 
+		    ->where('t.creator = '.$userid)
+		    ->leftJoin( 't.comments' , 'c' )
+                    ->leftJoin(Tag::class, 'ta', 'with', 't.id = ta.id')
+            //  ->leftJoin(Comment::class, 'c', 'with', 't.id = c.ticket')
+	            ->groupBy('t.id')              
+	   //   ->having('(t.id - COUNT(c.id)) <= 0')
+                    ->orderBy('t.id', 'ASC')
+                    ->getQuery()
+	            ->getResult(); 
     }
     
 

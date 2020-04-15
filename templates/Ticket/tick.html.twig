@@ -29,7 +29,13 @@
             <a>{{ tag.name }}</a>
          {% endfor %}
       </td>
-      <td><a style="color: white;" href="{{ asset('uploads/file/' ~ tick.brochureFilename) }}">Attachment</a></td>
+      <td>
+         {% if tick.brochureFilename == NULL %}
+              {{ 'no' }}
+         {% else %}
+              <a style="color: white;" href="{{ asset('uploads/file/' ~ tick.brochureFilename) }}">Attachment</a>
+         {% endif %}
+      </td>
       <td>{{ tick.addressee.username }}</td>
     </tr>
      {#% endfor %#}

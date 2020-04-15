@@ -15,10 +15,12 @@ use Symfony\Component\HttpFoundation\Request ;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class TicketController extends AbstractController
 {
-     /**
+    /**
+     * @IsGranted("ROLE_USER")
      * @Route("/newTick/{proj_id}", name="creat_ticket", methods={"GET","POST"})
      */
     public function new ( $proj_id, Request $request, SluggerInterface $slugger ) : Response
@@ -102,7 +104,8 @@ class TicketController extends AbstractController
         ]);
     }
 
-     /**
+    /**
+      * @IsGranted("ROLE_USER")
       * @Route("/{project_id}/editTick/{id}", name="edit_ticket",  methods={"GET","POST"})
       */
      public function edit (  Request $request, $id, $project_id, SluggerInterface $slugger ) : Response
@@ -183,7 +186,8 @@ class TicketController extends AbstractController
            ]);
      }
 
-      /**
+     /**
+      * @IsGranted("ROLE_USER")
       * @Route("/{project_id}/delete_ticket/{id}", name="delete_ticket")
       */
      public function delete_tick ( Request $request, $id, $project_id ) : Response
@@ -206,7 +210,8 @@ class TicketController extends AbstractController
          return $this-> redirectToRoute('show_project', ['id' => $project_id]);
       }
 
-      /**
+     /**
+      * @IsGranted("ROLE_USER")
       * @Route("/{proj_id}/Tick/{id}", name="ticket")
       */
      public function ticket ( $proj_id, Request $request, $id ) : Response
