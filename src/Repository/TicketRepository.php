@@ -39,7 +39,18 @@ class TicketRepository extends ServiceEntityRepository
                     ->getQuery()
 	            ->getResult(); 
     }
-    
+
+    public function findTag($tagId)
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.tags = :tagId')
+            ->setParameter('tagId', $tagId)
+            //->orderBy('t.id', 'ASC')
+            //->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }    
 
     /*
     public function findOneBySomeField($value): ?Ticket

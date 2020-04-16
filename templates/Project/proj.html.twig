@@ -5,9 +5,9 @@
 
 {% block body %}
 
-{% if is_granted('ROLE_USER_' ~ proj.author.id) or is_granted('ROLE_ADMIN') %}
+{#% if is_granted('ROLE_USER_' ~ proj.author.id) or is_granted('ROLE_ADMIN') %#}
 <div><button type="button" style="margin: 0px 0px 0px 20px" class="btn btn-success" onclick="location.href='{{ path( 'creat_ticket', {'proj_id': proj.id}) }}'">Create Ticket</button></div>
-{% endif %}
+{#% endif %#}
 
  <div class="card-body">
        <H1 align="center">{{ proj.nameProj }}</H1>
@@ -17,8 +17,11 @@
     <tr>
       <th scope="col">Id</th>
       <th scope="col">Name</th>
-      <th scope="col">Creator</th>
+      <th scope="col">Type</th>
+      <th scope="col">Status</th>
       <th scope="col">Addressee</th>
+      <th scope="col">Tags</th>
+      
     </tr>
   </thead>
   <tbody>
@@ -26,8 +29,14 @@
     <tr>
       <td>{{ ticket.id }}</td>
       <td><a style="color: white;" href="{{ path( 'ticket', {'proj_id':proj.id, 'id':ticket.id}) }}" >{{ ticket.name }}</a></td>
-      <td>{{ ticket.creator.username }}</td>
+      <td>{{ ticket.type }}</td>
+      <td>{{ ticket.status }}</td>
       <td>{{ ticket.addressee.username }}</td>
+      <td>
+         {% for tag in ticket.tags %}
+            <a style="color: white;" href="{{ path( 'tag', { 'id':tag.id }) }}">{{ tag.name }}</a>
+         {% endfor %}
+      </td>
       {% if is_granted('ROLE_USER_' ~ ticket.creator.id) or is_granted("ROLE_ADMIN") %}
           <td> <button type="button" class="btn btn-outline-light" onclick="location.href='{{ path( 'edit_ticket', { 'id':ticket.id, 'project_id':proj.id}) }}'">Edit</button> </td>
           <td> <button type="button" class="btn btn-outline-light" onclick="location.href='{{ path('delete_ticket', {'id':ticket.id, 'project_id':proj.id}) }}'">Delete</button> </td>

@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ user.username }}{% endblock %}
+
+{% block body %}
+
+<big>You are logged in as a {{ user.username }}</big>
+
+ <div class="card-body">
+       <H1 align="center"> My tickets </H1>
+       <table class="table table-hover table-dark">
+  <thead>
+    <tr align="center">
+      <th scope="col">id</th>
+      <th scope="col">name</th>
+      <th scope="col">status</th>
+      <th scope="col">comments</th>
+      <th scope="col">has file?</th>
+      <th scope="col">tags</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for tick in tick %}
+     <tr align="center">  
+      <td>{{ tick.0.id }}</td>
+      <td>{{ tick.0.name }}</td>
+      <td>{{ tick.0.status }}</td>     
+      <td>{{ tick.1 }}</td>
+      <td>
+         {% if tick.0.brochureFilename == NULL %}
+            {{ 'no' }}
+         {% else %}
+            {{ 'yes' }}
+         {% endif%}
+      </td>
+      <td>
+         {% for tag in tick.0.tags %}
+             <a style="color: white;" href="{{ path( 'tag', { 'id':tag.id }) }}">{{ tag.name }}</a>
+         {% endfor %}
+      </td>
+     </tr>
+     {% endfor %}
+  </tbody>
+ </table>
+</div>
+
+<div><button type="button" style="margin: 10px 0px 0px 1150px" onclick="location.href='{{ path('list_proj') }}'" class="btn btn-secondary">List of projects</button><div>
+{% endblock %}

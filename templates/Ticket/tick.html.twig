@@ -4,29 +4,28 @@
 {% block body %}
 
  <div class="card-body">
-       <H1 align="center">Ticket</H1>
-       <H1 align="center">{{ tick.name }}</H1>
+       <H1 align="center">Ticket {{ tick.name }}</H1>
        <table class="table table-hover table-dark">
   <thead>
     <tr align="center">
-      <th scope="col">Creator</th>
+      <th scope="col">Id</th>
       <th scope="col">Type</th>
       <th scope="col">Status</th>
-      <th scope="col">Description</th>
+      <th scope="col">Addressee</th>
       <th scope="col">Tags</th>
       <th scope="col">file</th>
-      <th scope="col">Addressee</th>
+      <th scope="col">Creator</th>
     </tr>
   </thead>
   <tbody>
     <tr align="center">
-      <td>{{ tick.creator.username }}</td>
+      <td>{{ tick.id }}</td>
       <td>{{ tick.type }}</td>
       <td>{{ tick.status }}</td>
-      <td width= 100px;>{{ tick.description }}</td>
+      <td>{{ tick.addressee.username }}</td>
       <td> 
          {% for tag in tick.tags %}
-            <a>{{ tag.name }}</a>
+            <a style="color: white;" href="{{ path( 'tag', { 'id':tag.id }) }}">{{ tag.name }}</a>
          {% endfor %}
       </td>
       <td>
@@ -36,13 +35,46 @@
               <a style="color: white;" href="{{ asset('uploads/file/' ~ tick.brochureFilename) }}">Attachment</a>
          {% endif %}
       </td>
-      <td>{{ tick.addressee.username }}</td>
+      <td>{{ tick.creator.username }}</td>
     </tr>
      {#% endfor %#}
   </tbody>
  </table>
+<div style="margin: 0px 0px 0px 20px">
+  <button type="button" style=" margin: 0px 20px 0px 1000px; " class="btn btn-warning" onclick="location.href='{{ path( 'edit_ticket', { 'id':tick.id, 'project_id':proj.id}) }}'">Edit</button>
+  <button type="button" class="btn btn-warning" onclick="location.href='{{ path('delete_ticket', {'id':tick.id, 'project_id':proj.id}) }}'">Delete</button>
 </div>
-<div><button type="button" style="margin: 0px 0px 0px 600px" class="btn btn-success" onclick="location.href='{{ path( 'comment', {'proj_id':proj.id, 'id':tick.id}) }}'">Comments</button></div>
+<div align="center">
+   <h1>Description</h1>
+   <p>{{ tick.description }}</p>
+</div>
+</div>
+<div align="center">
+    <h1>Comments</h1>
+    <div>
+       {% for comment in tick.comments %}
+         <br>
+         <p style=" font-weight: bold;  margin: 0px 200px 0px 0px; font-style: italic;">{{ comment.creator.username}} : </p>{{ comment.text }}
+            {% if is_granted('ROLE_USER_' ~ comment.creator.id) or is_granted('ROLE_ADMIN') %}
+            <button style="margin: 0px 0px 0px 20px" type="button" class="btn btn-outline-dark" onclick="location.href='{{ path('delete_com', {'proj_id':proj.id, 'tick_id':tick.id, 'id':comment.id}) }}'">Delete</button> <br>
+         {% endif %}
+       {% endfor %}
+    </div>
+    <br>
+</div>
+ <div align="center">
+     {{ form_start ( form ) }}
+      <div>
+         {{ form_errors ( form ) }}
+      </div >
+      <div>
+              {{ form_label ( form.text , ' ' ) }}
+              {{ form_widget ( form.text , { 'attr' : { 'class' : 'task_field' }} ) }}
+       </ div >
+     {{ form_end ( form ) }}
+
+    <button type="submit" class="btn btn-success">Add</button>
+{#<div><button type="button" style="margin: 0px 0px 0px 600px" class="btn btn-success" onclick="location.href='{{ path( 'comment', {'proj_id':proj.id, 'id':tick.id}) }}'">Comments</button></div>#}
 <div><button type="button" style="margin: 10px 0px 0px 1150px"  onclick="location.href='{{ path('show_project', {'id':proj.id}) }}'" class="btn btn-secondary">List of tickets</button><div>
 {% endblock %}
 

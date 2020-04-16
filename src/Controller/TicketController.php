@@ -6,6 +6,8 @@ use App\Entity\Tag;
 use App\Entity\Ticket;
 use App\Entity\User ;
 use App\Entity\Projects ;
+use App\Entity\Comment;
+use App\Form\Type\CommentType ;
 use App\Form\Type\TickType ;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -221,6 +223,10 @@ class TicketController extends AbstractController
          $proj = $entityManager->getRepository(Projects::class)
 		 -> find($proj_id);
 
+	 $users = $this->getDoctrine()
+            -> getRepository(User::class)
+	    -> findAll();
+
          $tick = $this -> getDoctrine ($id)
             -> getManager()
             -> getRepository ( Ticket :: class )
@@ -229,12 +235,102 @@ class TicketController extends AbstractController
          if ( ! $tick ) {
             throw $this -> createNotFoundException (
                'No project found for id ' . $id
-             );
+            );
 	 }
+         
+         $comment = new Comment();
+         $creator = $this->getUser()->getId();
+         $form = $this->createForm(CommentType::class, $comment);
+         $form->handleRequest($request);
 
-	  return $this->render('Ticket/tick.html.twig', [		  
+         if ($form->isSubmitted() && $form->isValid()) {
+             $entityManager = $this->getDoctrine()->getManager();
+
+             $user = $entityManager -> getRepository(User::class)->find($creator);
+             $ticket = $entityManager -> getRepository(Ticket::class)->find($id);
+
+             $comment -> setTicket($ticket);
+             $comment -> setCreator($user);
+
+             $entityManager -> persist($ticket);
+             $entityManager -> persist($user);
+             $entityManager -> persist($comment);
+	     $entityManager -> flush();
+
+	     return $this->redirectToRoute('ticket', ['proj_id' => $proj_id, 'id' => $id]);
+         }
+
+
+	 return $this->render('Ticket/tick.html.twig', [		  
 		  'tick' => $tick,
-	          'proj' => $proj,
+		  'proj' => $proj,
+		  'comment' => $comment,
+                  'form' => $form->createView(),
 	  ]);
-    }
+     }
+
+     public function comments($proj_id, Request $request, $id) : Response
+     {
+         $entityManager = $this-> getDoctrine($proj_id)
+            -> getManager();
+         $proj = $entityManager->getRepository(Projects::class)
+            -> find($proj_id);
+
+         $user = $this->getUser()->getId();
+         $tick = $this -> getDoctrine ($id)
+            -> getManager()
+            -> getRepository ( Ticket :: class )
+            -> find ( $id );
+
+         $comments = $this->getDoctrine()
+            -> getRepository(Comment::class)
+            -> find($id);
+
+         return $this->render('Ticket/tick.html.twig', [
+                     'tick' => $tick,
+                     'comment' => $comments,
+                     'user' => $user,
+                     'proj' => $proj,
+         ]);
+     }
+
+
+     /**
+      * @Route("/{proj_id}/{tick_id}/delete_com/{id}", name="delete_com")
+      */     
+      public function delete_com ($proj_id, $tick_id, Request $request, $id ) : Response
+     {
+          $entityManager = $this-> getDoctrine($proj_id)
+                -> getManager();
+          $proj = $entityManager->getRepository(Projects::class)
+                 -> find($proj_id);
+
+          $tick = $this -> getDoctrine ($tick_id)
+            -> getManager()
+            -> getRepository ( Ticket :: class )
+            -> find ( $tick_id );
+         
+         $comments = $this->getDoctrine()
+             -> getRepository(Comment::class)
+             -> find($tick_id);
+
+         $comment = $this -> getDoctrine ($id)
+            -> getRepository ( Comment :: class )
+            -> find ( $id );
+
+         if($comment){
+            $em = $this->getDoctrine()->getManager();
+            $em -> remove($comment);
+            $em -> flush();
+
+            return $this->redirectToRoute('ticket', ['proj_id' => $proj_id, 'id' => $tick_id]);
+         }
+
+          return $this->render('Ticket/tick.html.twig', [
+                     'tick' => $tick,
+                     'comment' => $comments,
+                     'proj' => $proj,
+                    ]);
+
+      }
 }

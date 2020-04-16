@@ -5,6 +5,7 @@ namespace App\Form\Type ;
 use App\Entity\Type\Tick ;
 use App\Entity\User;
 use App\Entity\Ticket;
+use App\Entity\Tag;
 use Symfony\Component\Form\AbstractType ;
 use Symfony\Component\Form\Extension\Core\Type\TextType ;
 use Symfony\Component\Form\FormBuilderInterface ;
@@ -18,6 +19,12 @@ class TickType extends AbstractType
 {
     public function buildForm ( FormBuilderInterface $builder , array $options )
     {
+        $tags_form = [];
+        $tags = $builder-> getData()-> getTags();
+        foreach ($tags as $tag) {
+            $tags_form[] = $tag-> getName();
+        }
+
         $builder
 	    -> add ( 'name' , TextType :: class)
 	    -> add ( 'type' , ChoiceType :: class, [
@@ -54,7 +61,7 @@ class TickType extends AbstractType
                     'choice_label' => 'username',
             ])
 	    -> add ( 'description' , TextType :: class)
-	    -> add('tags_string', TextType :: class, ['mapped' => false])
+	    -> add('tags_string', TextType :: class, ['mapped' => false, 'data' => implode(', ', $tags_form)])
         ;
     }
 
